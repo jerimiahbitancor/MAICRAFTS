@@ -1,16 +1,19 @@
+import React from 'react';
+import Navbar from "./components/Navbar.jsx";
+import Home from "./pages/Home.jsx";
 
-import './App.css'
-
-function App() {
-
+const App = () => {
   return (
-    <>
-      <div>
-       
-      </div>
-     
-    </>
-  )
-}
+    <div>
+      <Navbar />
 
-export default App
+      {/* Home section should be the top section */}
+      <section id="home">
+        <Home />
+      </section>
+
+    </div>
+  );
+};
+
+export default App;

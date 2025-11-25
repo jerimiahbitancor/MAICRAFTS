@@ -1,0 +1,51 @@
+/* Wrapper */
+.custom-footer {
+  width: 100%;
+  background: #ffffff;
+  padding: 0;
+  font-family: "Instrument Serif", serif;
+}
+
+/* TOP (Gold Section) */
+.footer-top {
+  background: #E6BB71;
+  padding: 25px 10px;
+  text-align: center;
+}
+
+.footer-title {
+  font-size: 28px;
+  color: #000;
+  margin-bottom: 4px;
+}
+
+.footer-subtitle {
+  font-size: 15px;
+  margin: 0;
+  opacity: 0.9;
+  color: #000;
+}
+
+/* BOTTOM (White with Icons) */
+.footer-bottom {
+  background: #ffffff;
+  padding: 18px 0;
+  text-align: center;
+}
+
+/* Social Icons */
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.social-icons a {
+  font-size: 24px;
+  color: #000;
+  transition: 0.2s ease;
+}
+
+.social-icons a:hover {
+  transform: scale(1.1);
+}

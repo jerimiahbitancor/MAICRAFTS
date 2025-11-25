@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Carattere&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 .nav-container {
   width: 100%;
-  position: absolute;
-  top: 1;
+  position: fixed;        /* makes it stick */
+  top: 0;
   left: 0;
-  z-index: 50;
+  z-index: 999;           /* stays on top of everything */
 }
+
 
 .nav-inner {
   max-width: 1100px;
@@ -61,6 +62,8 @@
 .nav-links {
   display: flex;
   gap: 4rem;
+    color: #ffffff;
+
 }
 
 .nav-link {

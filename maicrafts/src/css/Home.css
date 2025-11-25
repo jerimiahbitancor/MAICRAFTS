@@ -1,38 +1,386 @@
-:root {
-  --text: #EAB559;
+  @import url('https://fonts.googleapis.com/css2?family=Carattere&family=Instrument+Serif:ital@0;1&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+  :root {
+    --accent: #E6BB71;
+    --brown-dark: #462c14;
+    --brown-overlay: rgba(70, 44, 20, 0.65);
+    --gold: #FFBD3A;
+  }
+
+  /* ================= HERO SECTION ================= */
+  .hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    position: relative;
+    min-height: 100vh;
+    background-image: url('../assets/counter.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    overflow: hidden;
+  }
+
+  .circular-gradient-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(70, 44, 20, 1) 10%, rgba(43, 27, 14,12) 30%, rgba(23, 13, 6, 100) 100%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 0.5;
+    z-index: 1;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Container (flex responsive) */
+  .cta-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 3rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* For screens ≥ 576px (like sm in Bootstrap) */
+  @media (min-width: 576px) {
+    .cta-container {
+      flex-direction: row;
+      gap: 1.2rem;
+    }
+  }
+
+  /* Main Filled Button */
+  .btn-primary-custom {
+    background-color: #E6BB71;
+    color: #000;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    text-decoration: none;
+    border-radius: 8px;
+    font-family: "Playfair Display";
+    transition: 0.3s;
+    width: 100%;
+    text-align: center;
+  }
+
+  @media (min-width: 576px) {
+    .btn-primary-custom {
+      width: auto;
+    }
+  }
+
+  .btn-primary-custom:hover {
+    background-color: #d4a45f;
+  }
+
+  /* Outline Button */
+  .btn-outline-custom {
+    border: 2px solid white;
+    color: white;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    text-decoration: none;
+    border-radius: 8px;
+    font-family: "Playfair Display";
+    transition: 0.3s;
+    width: 100%;
+    text-align: center;
+  }
+
+  @media (min-width: 576px) {
+    .btn-outline-custom {
+      width: auto;
+    }
+  }
+
+  .btn-outline-custom:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+
+  .featured-title {
+    font-family: 'Carattere', cursive;
+    font-size: 4rem;
+    letter-spacing: 8px;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+    margin-bottom: 1rem;
+  }
+
+  .featured-desc {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+    margin-bottom: 2rem;
+  }
+
+  .btn-custom {
+    background-color: var(--accent);
+    color: #0b0b0b;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    padding: 0.75rem 2rem;
+    margin: 0 0.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .btn-custom:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(212, 163, 115, 0.4);
+    color: #000;
+  }
+
+  /* ================= FEATURED PRODUCTS ================= */
+  .featured-prod {
+    background-color: var(--brown-dark);
+    padding: 50px 20px;
+    text-align: center;
+  }
+
+  .prod-title {
+    font-family: 'Playfair Display', serif;
+    color: var(--accent);
+    letter-spacing: 6px;
+    font-weight: 500;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+  }
+
+  /* Grid layout */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    justify-items: center;
+    padding: 20px 0;
+  }
+
+  .product-item {
+    width: 100%;
+  }
+
+  /* ================= PRODUCT CARD ================= */
+  .product-card {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05); /* semi-transparent */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 5px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    border-image: linear-gradient(to bottom, var(--gold), #BC6400) 1;
+    transition: all 0.4s ease;
+    min-height: 300px;}
+
+
+  .product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
+  }
+
+  /* ================= IMAGE WRAPPER ================= */
+  .img-wrapper {
+    position: relative;
+    overflow: hidden;
+    height: 380px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .img-wrapper:hover img {
+    transform: scale(1.1);
+  }
+
+  .img-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.6));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .img-wrapper:hover .img-overlay {
+    opacity: 1;
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .section-title::before,
+  .section-title::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--accent), transparent);
+    max-width: 300px;
+  }
+
+  .prod-title {
+    font-family: "Playfair Display", serif;
+    letter-spacing: 5px;
+    color: var(--accent);
+    font-weight: 500;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+
+  /* ================= PRODUCT INFO ================= */
+  .product-info {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 15px 20px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.3s ease;
+  }
+
+  .img-wrapper:hover .product-info {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .product-title {
+    color: #f0c040;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  /* ================= DOTS ================= */
+  .dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: 0 8px;
+    background-color: #666;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+  }
+
+  .dot.active {
+    background-color: var(--accent);
+  }
+
+  /* ================= FOOTER ================= */
+
+  .hover-scale {
+    transition: transform 0.3s ease;
+  }
+
+  .hover-scale:hover {
+    transform: scale(1.3);
+  }
+
+  /* ================= RESPONSIVE ================= */
+  @media (max-width: 768px) {
+    .featured-title {
+      font-size: 3.5rem;
+    }
+    .featured-desc {
+      font-size: 1.2rem;
+    }
+    .product-card {
+      min-height: 480px;
+    }
+    .img-wrapper {
+      height: 340px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .img-wrapper {
+      height: 300px;
+    }
+  }
+
+/* =====================================
+   RESPONSIVE FIX FOR PRODUCT CARDS
+   (keeps your exact design but responsive)
+===================================== */
+
+/* Tablets */
+@media (max-width: 992px) {
+  .product-card {
+    min-height: 260px;
+  }
+
+  .img-wrapper {
+    height: 260px;
+  }
 }
 
-.bg-pattern {
+/* Mobile Landscape / Large Phones */
+@media (max-width: 768px) {
+  .product-card {
+    min-height: 230px;
+  }
+
+  .img-wrapper {
+    height: 230px;
+  }
+}
+
+/* Small Phones */
+@media (max-width: 480px) {
+  .product-card {
+    min-height: 200px;
+  }
+
+  .img-wrapper {
+    height: 200px;
+  }
+}
+
+
+.header-section {
   position: relative;
-  width: 100%;
-  min-height: 130vh;
-  background: url("../assets/counter.png") center/cover no-repeat;
-}
-
-.bg-pattern .overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(70,44,20,0.5), rgba(70,44,20,0.8));
   z-index: 1;
 }
 
-.bg-pattern .content {
-  position: relative;
-  z-index: 2;
-  color: white;
+.header-section::before {
+  padding-top: 100px;
+  content: "";
+  position: absolute;
+  bottom: -40px;        
+  left: 50%;
+  transform: translateX(-50%);
+  
+  width: 500px;       
+  height: 500px;
+  background: #462c14;
+  
+  border-radius: 50%;
+  filter: blur(100px);  
+  opacity: 5;     
+
+  z-index: -1;         
 }
-
-
-
-.featured-title {
-  color: var(--text);
-  font-family: "Playfair Display";
-  font-size: 32px; 
-  font-weight: 600;
-  margin-bottom: 40px; 
-  text-align: center;
-}
-

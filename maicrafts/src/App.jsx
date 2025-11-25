@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from "./components/Navbar.jsx";
 import Home from "./pages/Home.jsx";
+import Footer from './components/Footer.jsx';
 
 const App = () => {
   return (
@@ -11,7 +12,7 @@ const App = () => {
       <section id="home">
         <Home />
       </section>
-
+    <Footer/>
     </div>
   );
 };

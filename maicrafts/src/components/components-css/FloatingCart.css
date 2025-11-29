@@ -1,0 +1,85 @@
+/* Floating Circular Button */
+.floating-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background: #ffd700; /* bright yellow */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: 9999; /* very high to show above everything */
+}
+
+.floating-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.floating-icon {
+  color: #000; /* black icon for contrast */
+  font-size: 1.8rem;
+}
+
+/* Sliding Cart Panel */
+.cart-panel {
+  position: fixed;
+  bottom: -420px; /* hidden offscreen */
+  right: 20px;
+  width: 300px;
+  max-height: 400px;
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.25);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  transition: bottom 0.4s ease-in-out;
+  z-index: 9999;
+}
+
+/* Open state */
+.cart-panel.open {
+  bottom: 90px; /* slide up above button */
+}
+
+/* Cart content */
+.cart-panel h3 {
+  margin: 0;
+  color: #000;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.cart-items {
+  flex: 1;
+  overflow-y: auto;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.cart-items p {
+  margin: 5px 0;
+}
+
+/* Checkout button */
+.checkout-btn {
+  background: #ffd700;
+  color: #000;
+  border: none;
+  border-radius: 12px;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.checkout-btn:hover {
+  background: #e6c200;
+}

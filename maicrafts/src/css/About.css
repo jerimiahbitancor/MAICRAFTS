@@ -46,7 +46,6 @@
   color: #fff;
   font-size: clamp(0.9rem, 1.2vw, 1.05rem);
 }
-
 /* ===== CENTER ARCH ===== */
 .center-arch {
   width: clamp(240px, 24%, 380px);
@@ -59,6 +58,7 @@
   border-radius: 50% 50% 0 0;
   overflow: hidden;
   margin: 30px;
+  cursor: pointer;
 }
 
 /* ===== GOLD BASE BAR ===== */
@@ -80,6 +80,39 @@
   object-fit: cover;
   border-radius: 50% 50% 0 0;
 }
+
+.arch-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(188, 150, 40, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  border-radius: 50% 50% 0 0;
+}
+
+.arch-overlay span {
+  color: var(--brown-dark);
+  font-size: 2rem;
+  font-family: "Playfair Display", serif;
+  letter-spacing: 2px;
+  opacity: 0;
+  font-weight: 100;
+  transform: translateY(10px);
+  transition: 0.35s ease;
+}
+
+.center-arch:hover .arch-overlay {
+  opacity: 1;
+}
+
+.center-arch:hover .arch-overlay span {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 
 /* ===== OUR WORK SECTION ===== */
 .our-work {
@@ -117,6 +150,11 @@
   line-height: 1.6;
   color: #fff;
   font-family: "Poppins", sans-serif;
+width: min(1200px, 90%);
+  margin-left: auto;
+  margin-right: auto;
+  font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+  align-content: justify;
 }
 
 /* GALLERY BOX */

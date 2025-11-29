@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../css/Products.css";
 import { BsCart } from "react-icons/bs";
+import FloatingCart from "../components/FloatingCart.jsx";
 
 const productItems = [
   { img: "/flower1.svg", title: "Eternal Rose Bouquet", price: 159 },
@@ -113,6 +114,7 @@ const Products = () => {
           </div>
         </div>
       </section>
+            <FloatingCart />
     </>
   );
 };

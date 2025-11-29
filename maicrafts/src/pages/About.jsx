@@ -1,4 +1,5 @@
 import "../css/About.css";
+import FloatingCart from "../components/FloatingCart.jsx";
 
 const About = () => {
   return (
@@ -24,6 +25,10 @@ const About = () => {
     playsInline
     className="arch-video"
   />
+
+   <div className="arch-overlay">
+    <span>Maicrafts</span>
+  </div>
 </div>
 
 
@@ -40,12 +45,14 @@ const About = () => {
       <section className="our-work">
         <h2>Our Work</h2>
         <p>
-          We take pride in delivering exceptional results in every project we handle.
+MaiCrafts aims to build a strong presence in online marketplaces and social media, while gaining loyal customers through quality products and good service. The business also plans to introduce at least five new handcrafted product designs within the next two years. For the long term, the company envisions opening a physical shop or showroom where customers can personally see and purchase its products. Also, this seeks to explore new types of handmade items, collaborate with local artists and suppliers to support sustainable craftsmanship, and establish itself as a trusted brand for handmade goods in the Philippines.
         </p>
         <div className="work-gallery">
           {/* Placeholder for images or projects */}
         </div>
       </section>
+            <FloatingCart />
+
     </>
   );
 };

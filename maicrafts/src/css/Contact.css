@@ -1,0 +1,107 @@
+/* ===== Contact Section ===== */
+.contact-section {
+  text-align: center;
+  padding: clamp(120px, 15vw, 180px) 5% clamp(80px, 10vw, 140px);
+  background-color: var(--brown-dark);
+  color: #fff;
+}
+
+.contact-section h2 {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  margin-bottom: 2rem;
+  color: var(--gold);
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
+  position: relative;
+  display: inline-block;
+  padding: 0 40px;
+}
+
+.contact-section h2::before,
+.contact-section h2::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: clamp(80px, 15vw, 180px);
+  height: 2px;
+  background-color: var(--gold);
+  transform: translateY(-50%);
+}
+
+.contact-section h2::before { left: 100%; margin-left: 30px; }
+.contact-section h2::after  { right: 100%; margin-right: 30px; }
+
+.contact-paragraph {
+  max-width: 850px;
+  margin: 0 auto 60px;
+  font-size: clamp(1rem, 1.5vw, 1.1rem);
+  line-height: 1.8;
+  color: #f0f0f0;
+  opacity: 0.95;
+}
+
+/* ===== Contact Grid ===== */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  max-width: 900px;
+  margin: 0 auto 50px;
+  justify-items: center;
+}
+
+/* Contact Cards */
+.contact-card {
+  border-radius: 16px;
+  padding: 20px 25px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 1rem;
+  font-weight: 500;
+  min-height: 92px;
+  transition: all 0.3s ease;
+  justify-content: center;
+  text-align: center;
+}
+
+.contact-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Icons */
+.icon {
+  font-size: 2.1rem;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+/* ===== Gallery Placeholder ===== */
+.work-gallery1 {
+  width: min(800px, 90%);
+  min-height: 200px;
+  margin: 0 auto;
+  border: 3px dashed #F3D27F;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  color: #f0f0f0;
+  font-weight: 500;
+  text-align: center;
+  border-radius: 12px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .contact-grid {
+    grid-template-columns: 1fr; /* stack cards vertically */
+    gap: 20px;
+  }
+
+  .contact-card {
+    width: 100%;
+  }
+}

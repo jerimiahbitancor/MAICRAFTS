@@ -204,17 +204,24 @@
   color: var(--brown-dark);
 }
 
-.product-title {
-  font-size: 20px;
+.product-details {
+  padding: 1rem;
+  text-align: center;
+  background: white;
+}
+
+.product-details .product-title {
+  font-size: 30px;
   font-weight: 600;
   margin: 0 0 0.5rem 0;
   color: var(--brown-dark);
+  font-family: 'Playfair Display', serif;
 }
 
 .product-price {
   font-size: 1.3rem;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--brown-dark);
   margin: 0;
 }
 

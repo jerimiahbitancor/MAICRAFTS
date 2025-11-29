@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { X, Plus, Facebook, Instagram, Mail } from "lucide-react";
 import "../css/CustomizeFormModal.css";
+import emailjs from '@emailjs/browser';
 
 const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for control
   const [formData, setFormData] = useState({
@@ -9,7 +10,7 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
     customDescription: "",
     sizeScale: "",
     additionalRequests: "",
-    contactNumber: "",
+    customerEmail: "",  // Updated: Replaced contactNumber with customerEmail
   });
 
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -41,10 +42,10 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
     if (!formData.customDescription.trim()) {
       newErrors.customDescription = "Please describe your custom order.";
     }
-    if (!formData.contactNumber.trim()) {
-      newErrors.contactNumber = "Please enter your contact number.";
-    } else if (!/^(09\d{9}|\+63\d{9})$/.test(formData.contactNumber.trim())) {
-      newErrors.contactNumber = "Please enter a valid Philippine mobile number (e.g., 09123456789 or +639123456789).";
+    if (!formData.customerEmail.trim()) {  // Updated: Validate email instead of phone
+      newErrors.customerEmail = "Please enter your email address.";
+    } else if (!/\S+@\S+\.\S+/.test(formData.customerEmail.trim())) {
+      newErrors.customerEmail = "Please enter a valid email address.";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -56,7 +57,7 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
       customDescription: "",
       sizeScale: "",
       additionalRequests: "",
-      contactNumber: "",
+      customerEmail: "",  // Updated: Reset customerEmail
     });
     setUploadedImage(null);
     setErrors({});
@@ -64,10 +65,35 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
 
   const handleSubmit = () => {
     if (validateForm()) {
-      console.log("Form submitted:", formData);
-      alert("Custom order submitted successfully!");
-      resetForm();  // Reset form after successful submission
-      onClose();  // Close the modal after submission
+      // Prepare data for EmailJS (map formData to template variables)
+      const templateParams = {
+        productType: formData.productType,
+        customDescription: formData.customDescription,
+        sizeScale: formData.sizeScale || "Not specified",
+        additionalRequests: formData.additionalRequests || "None",
+        customerEmail: formData.customerEmail,  // Updated: Use customerEmail (this is the recipient)
+        // Optional: If attaching image, add imageUrl here after uploading to Cloudinary
+      };
+
+      // Send email using EmailJS
+      emailjs.send(
+        'service_qxu1bhv',  // Replace with your EmailJS service ID
+        'template_qy8mwbr',  // Replace with your EmailJS template ID
+        templateParams,
+        's9m7Qu_NeupEAwhmQ'  // Replace with your EmailJS public key
+      )
+      .then((response) => {
+        console.log('Email sent successfully:', response);
+        alert("Custom order submitted successfully! A confirmation email has been sent to your email.");
+        resetForm();
+        onClose();
+      })
+      .catch((error) => {
+        console.error('Email send failed:', error);
+        alert("Submission successful, but email failed to send. Please contact us directly.");
+        resetForm();
+        onClose();
+      });
     }
   };
 
@@ -208,16 +234,16 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
                   </label>
 
                   <div className="cfm-contactInputs">
-                    <input
-                      type="text"
-                      name="contactNumber"
-                      placeholder="Mobile Number (e.g., 09123456789)"
-                      value={formData.contactNumber}
+                    <input  // Updated: Changed to email input
+                      type="email"
+                      name="customerEmail"
+                      placeholder="Email Address (e.g., example@gmail.com)"
+                      value={formData.customerEmail}
                       onChange={handleInputChange}
                       className="cfm-input"
                       required
                     />
-                    {errors.contactNumber && <p style={{ color: 'red', fontSize: '14px' }}>{errors.contactNumber}</p>}
+                    {errors.customerEmail && <p style={{ color: 'red', fontSize: '14px' }}>{errors.customerEmail}</p>}
                   </div>
 
                   <div className="cfm-socialLinks">

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { BsCart, BsTrash, BsX } from "react-icons/bs";
 import "../components/components-css/FloatingCart.css";
 
-const FloatingCart = () => {
+const FloatingCart = ({ cartItems = [], removeItem }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);

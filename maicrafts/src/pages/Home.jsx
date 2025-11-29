@@ -45,7 +45,16 @@ const Home = () => {
   return (
     <>
       {/* HERO SECTION */}
-      <section className="hero-section">
+ <section className="hero-section">
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    className="bg-video"
+    src="/counter1.mp4"
+  />
+
         <div className="circular-gradient-bg"></div>
         <div className="container hero-content py-5">
           <div className="row justify-content-center">
@@ -95,9 +104,14 @@ const Home = () => {
                           loading="lazy"
                         />
                         <div className="img-overlay"></div>
-                        <div className="product-info">
-                          <h5 className="product-title">{product.title}</h5>
+                        
+                      </div>
+                      <div className="product-info">
+                          
                         </div>
+                      <div className="product-details">
+                        <h5 className="product-title">{product.title}</h5>
+                        <p className="product-price">₱{product.price}</p>
                       </div>
                     </div>
                   </div>
@@ -105,10 +119,8 @@ const Home = () => {
             </div>
 
             {/* Prev/Next Buttons */}
-            <button className="carousel-btn prev" onClick={prevSlide}>
-            </button>
-            <button className="carousel-btn next" onClick={nextSlide}>
-            </button>
+            <button className="carousel-btn prev" onClick={prevSlide}></button>
+            <button className="carousel-btn next" onClick={nextSlide}></button>
 
             {/* Dots Indicator */}
             <div className="text-center mt-4">
@@ -125,8 +137,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-            <FloatingCart />
-
+      <FloatingCart />
     </>
   );
 };

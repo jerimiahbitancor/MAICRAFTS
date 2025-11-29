@@ -1,5 +1,5 @@
 // src/components/FloatingCart.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BsCart, BsTrash, BsX } from "react-icons/bs";
 import "../components/components-css/FloatingCart.css";
 
@@ -8,10 +8,12 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   const toggleCart = () => setIsOpen(!isOpen);
+
   const openCheckout = () => {
     setIsCheckoutOpen(true);
     setIsOpen(false);
   };
+
   const closeCheckout = () => setIsCheckoutOpen(false);
 
   const totalPrice = cartItems.reduce(
@@ -21,7 +23,6 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
 
   return (
     <>
-      {/* Floating Cart Button */}
       <div className="floating-button" onClick={toggleCart}>
         <BsCart className="floating-icon" />
         {cartItems.length > 0 && (
@@ -40,13 +41,16 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
             <p className="empty-msg">Your cart is empty</p>
           ) : (
             cartItems.map((item) => (
-              <div className="cart-item" key={item.id}>
+              <div className="cart-item" key={item.key}>
+                <img src={item.img} alt={item.title} className="item-thumb" />
+
                 <div className="item-info">
                   <span className="item-name">{item.title}</span>
                   <span className="item-price">₱{item.price.toFixed(2)}</span>
                 </div>
+
                 <div className="item-actions">
-                  <span className="item-qty">×{item.qty}</span>
+                  <span className="item-qty">×{item.quantity}</span>
                   <BsTrash
                     className="remove-item"
                     onClick={() => removeItem(item.key)}
@@ -67,7 +71,6 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
         </button>
       </div>
 
-      {/* CHECKOUT MODAL */}
       {isCheckoutOpen && (
         <div className="checkout-modal-overlay" onClick={closeCheckout}>
           <div className="checkout-modal" onClick={(e) => e.stopPropagation()}>
@@ -84,7 +87,7 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
                     <span className="modal-item-qty">×{item.qty}</span>
                   </div>
                   <span className="modal-item-price">
-                    ₱{(item.price * item.qty).toFixed(2)}
+                    ₱{(item.price * item.quantity).toFixed(2)}
                   </span>
                 </div>
               ))}
@@ -99,9 +102,7 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
               <button className="btn-continue-shopping" onClick={closeCheckout}>
                 Continue Shopping
               </button>
-              <button className="btn-proceed-payment">
-                Proceed to Payment
-              </button>
+              <button className="btn-proceed-payment">Proceed to Payment</button>
             </div>
 
             <p className="modal-note">
@@ -115,3 +116,4 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
 };
 
 export default FloatingCart;
+

@@ -3,20 +3,7 @@ import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/Home.css";
 import FloatingCart from "../components/FloatingCart.jsx";
-
-
-const products = [
-  { img: "/flower1.svg", title: "Eternal Rose Bouquet" },
-  { img: "/crochet1.svg", title: "Handmade Crochet Bunny" },
-  { img: "/flower2.svg", title: "Luxury Preserved Roses" },
-  { img: "/flower1.svg", title: "Eternal Rose Bouquet 2" },
-  { img: "/crochet1.svg", title: "Handmade Crochet Bunny 2" },
-  { img: "/flower2.svg", title: "Luxury Preserved Roses 2" },
-  { img: "https://i.imgur.com/9g0h1i2.jpg", title: "Luxury Preserved Roses 3" },
-  { img: "https://i.imgur.com/3j4k5l6.jpg", title: "Eternal Rose Bouquet 3" },
-  { img: "https://i.imgur.com/7m8n9o0.jpg", title: "Handmade Crochet Bunny 3" },
-  { img: "https://i.imgur.com/2p3q4r5.jpg", title: "Luxury Preserved Roses 4" },
-];
+import { products } from "../data/productsData.js";
 
 
 const Home = () => {
@@ -45,7 +32,16 @@ const Home = () => {
   return (
     <>
       {/* HERO SECTION */}
-      <section className="hero-section">
+ <section className="hero-section">
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    className="bg-video"
+    src="/counter1.mp4"
+  />
+
         <div className="circular-gradient-bg"></div>
         <div className="container hero-content py-5">
           <div className="row justify-content-center">
@@ -95,9 +91,14 @@ const Home = () => {
                           loading="lazy"
                         />
                         <div className="img-overlay"></div>
-                        <div className="product-info">
-                          <h5 className="product-title">{product.title}</h5>
+                        
+                      </div>
+                      <div className="product-info">
+                          
                         </div>
+                      <div className="product-details">
+                        <h5 className="product-title">{product.title}</h5>
+                        <p className="product-price">₱{product.price}</p>
                       </div>
                     </div>
                   </div>
@@ -105,10 +106,8 @@ const Home = () => {
             </div>
 
             {/* Prev/Next Buttons */}
-            <button className="carousel-btn prev" onClick={prevSlide}>
-            </button>
-            <button className="carousel-btn next" onClick={nextSlide}>
-            </button>
+            <button className="carousel-btn prev" onClick={prevSlide}></button>
+            <button className="carousel-btn next" onClick={nextSlide}></button>
 
             {/* Dots Indicator */}
             <div className="text-center mt-4">
@@ -125,8 +124,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-            <FloatingCart />
-
+      <FloatingCart />
     </>
   );
 };

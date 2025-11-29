@@ -4,7 +4,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/Home.css";
 import FloatingCart from "../components/FloatingCart.jsx";
 
-
 const products = [
   { img: "/flower1.svg", title: "Eternal Rose Bouquet" },
   { img: "/crochet1.svg", title: "Handmade Crochet Bunny" },
@@ -17,7 +16,6 @@ const products = [
   { img: "https://i.imgur.com/7m8n9o0.jpg", title: "Handmade Crochet Bunny 3" },
   { img: "https://i.imgur.com/2p3q4r5.jpg", title: "Luxury Preserved Roses 4" },
 ];
-
 
 const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -45,7 +43,16 @@ const Home = () => {
   return (
     <>
       {/* HERO SECTION */}
-      <section className="hero-section">
+ <section className="hero-section">
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    className="bg-video"
+    src="/counter1.mp4"
+  />
+
         <div className="circular-gradient-bg"></div>
         <div className="container hero-content py-5">
           <div className="row justify-content-center">
@@ -105,10 +112,8 @@ const Home = () => {
             </div>
 
             {/* Prev/Next Buttons */}
-            <button className="carousel-btn prev" onClick={prevSlide}>
-            </button>
-            <button className="carousel-btn next" onClick={nextSlide}>
-            </button>
+            <button className="carousel-btn prev" onClick={prevSlide}></button>
+            <button className="carousel-btn next" onClick={nextSlide}></button>
 
             {/* Dots Indicator */}
             <div className="text-center mt-4">
@@ -125,8 +130,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-            <FloatingCart />
-
+      <FloatingCart />
     </>
   );
 };

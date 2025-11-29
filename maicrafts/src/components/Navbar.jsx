@@ -5,7 +5,7 @@ import "./components-css/Navbar.css";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation(); // To track current route
+  const location = useLocation(); // To tracjhjhgjkrhgjhekgk current route
 
   const navLinks = [
     { name: "Home", path: "/" },

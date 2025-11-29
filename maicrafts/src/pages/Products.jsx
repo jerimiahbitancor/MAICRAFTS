@@ -156,51 +156,52 @@ const Products = () => {
                 ))}
               </div>
 
-              <div className="products-grid">
-                {filteredAndSortedProducts.map((product) => (
-                  <Link
+            <div className="products-grid">
+              {filteredAndSortedProducts.map((product) => (
+                    <Link
                     key={product.id}
-                    to={`/product/${product.id}`}
+                    to={
+                      product.category === "Crochet Gifts"
+                        ? `/crochet/${product.id}`     // ⬅ go to ProductDetail2.jsx
+                        : `/product/${product.id}`     // ⬅ default ProductDetail.jsx
+                    }
                     className="product-card-link"
-                  >
-                    <div className="product-card">
-                      {/* IMAGE */}
-                      <div className="product-img-wrapper">
-                        <img src={product.img} alt={product.title} className="product-img" />
+                  >              
+                  <div className="product-card">
+                    {/* IMAGE */}
+                    <div className="product-img-wrapper">
+                      <img src={product.img} alt={product.title} className="product-img" />
+                    </div>
+                    
+                    <div className="product-info-container">
+                      <div className="product-name-price">
+                        <h5 className="product-id">
+                          {product.id.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+                        </h5>
                       </div>
-                      
-                      <div className="product-info-container">
-                        <div className="product-name-price">
-                          <h5 className="product-id">
-                            {product.id.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
-                          </h5>
-                        </div>
-                        <div className="product-bottom">
-                          <p className="product-price">₱{product.price.toFixed(2)}</p>
-                          <button
-                            className="add-cart-btn"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              addToCart(product);
-                            }}
-                          >
-                            <BsCart size={22} />
-                          </button>
-                        </div>
+                      <div className="product-bottom">
+                        <p className="product-price">₱{product.price.toFixed(2)}</p>
+                        <button
+                          className="add-cart-btn"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            addToCart(product);
+                          }}
+                        >
+                          <BsCart size={22} />
+                        </button>
                       </div>
                     </div>
-                  </Link>
-                ))}
-              </div>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         </div>
-      </section>
-      {/* New: Render the modal, controlled by isModalOpen */}
-      <CustomizeFormModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-      <FloatingCart cartItems={cartItems} removeItem={removeItem} />
-    </>
-  );
+      </div>
+    </section>
+  </>
+);
 };
  
 export default Products;

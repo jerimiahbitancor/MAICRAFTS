@@ -1,29 +1,13 @@
 // src/components/FloatingCart.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { BsCart, BsTrash, BsX } from "react-icons/bs";
+import CheckoutFormModal from "./CheckoutFormModal";
 import "../components/components-css/FloatingCart.css";
 
-const FloatingCart = () => {
+const FloatingCart = ({ cartItems = [], removeItem }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
-
-  // Load cart on mount
-  useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("cart") || "[]");
-    setCartItems(stored);
-  }, []);
-
-  // Sync when "cart-updated" event fires
-  useEffect(() => {
-    const syncCart = () => {
-      const stored = JSON.parse(localStorage.getItem("cart") || "[]");
-      setCartItems(stored);
-    };
-
-    window.addEventListener("cart-updated", syncCart);
-    return () => window.removeEventListener("cart-updated", syncCart);
-  }, []);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   const toggleCart = () => setIsOpen(!isOpen);
 
@@ -34,21 +18,34 @@ const FloatingCart = () => {
 
   const closeCheckout = () => setIsCheckoutOpen(false);
 
-  // REMOVE ITEM — fixed and clean
-  const handleRemoveItem = (key) => {
-    const updated = cartItems.filter((item) => item.key !== key);
-    localStorage.setItem("cart", JSON.stringify(updated));
-    setCartItems(updated);
-    window.dispatchEvent(new Event("cart-updated"));
+  const handleProceedToPayment = () => {
+    setIsCheckoutOpen(false);
+    setIsFormOpen(true);
+  };
+
+  const handleFormSubmit = (formData) => {
+    // Handle the form submission here
+    console.log("Order Details:", {
+      customer: formData,
+      items: cartItems,
+      total: totalPrice
+    });
+    
+    // Close the form modal
+    setIsFormOpen(false);
+    
+    // You can add your payment gateway redirect or API call here
+    alert(`Thank you ${formData.firstName}! Your order has been received.`);
   };
 
   const totalPrice = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
+    (acc, item) => acc + item.price * item.qty,
     0
   );
 
   return (
     <>
+      {/* Floating Button */}
       <div className="floating-button" onClick={toggleCart}>
         <BsCart className="floating-icon" />
         {cartItems.length > 0 && (
@@ -56,6 +53,7 @@ const FloatingCart = () => {
         )}
       </div>
 
+      {/* Cart Panel */}
       <div className={`cart-panel ${isOpen ? "open" : ""}`}>
         <div className="cart-header">
           <h3>Your Cart</h3>
@@ -68,18 +66,16 @@ const FloatingCart = () => {
           ) : (
             cartItems.map((item) => (
               <div className="cart-item" key={item.key}>
-                <img src={item.img} alt={item.title} className="item-thumb" />
-
                 <div className="item-info">
                   <span className="item-name">{item.title}</span>
-                  <span className="item-price">₱{item.price}</span>
+                  <span className="item-price">₱{item.price.toFixed(2)}</span>
                 </div>
 
                 <div className="item-actions">
-                  <span className="item-qty">×{item.quantity}</span>
+                  <span className="item-qty">×{item.qty}</span>
                   <BsTrash
                     className="remove-item"
-                    onClick={() => handleRemoveItem(item.key)}
+                    onClick={() => removeItem(item.key)}
                   />
                 </div>
               </div>
@@ -97,6 +93,7 @@ const FloatingCart = () => {
         </button>
       </div>
 
+      {/* Checkout Modal */}
       {isCheckoutOpen && (
         <div className="checkout-modal-overlay" onClick={closeCheckout}>
           <div className="checkout-modal" onClick={(e) => e.stopPropagation()}>
@@ -110,10 +107,10 @@ const FloatingCart = () => {
                 <div className="modal-item" key={item.key}>
                   <div className="modal-item-left">
                     <span className="modal-item-name">{item.title}</span>
-                    <span className="modal-item-qty">×{item.quantity}</span>
+                    <span className="modal-item-qty">×{item.qty}</span>
                   </div>
                   <span className="modal-item-price">
-                    ₱{(item.price * item.quantity).toFixed(2)}
+                    ₱{(item.price * item.qty).toFixed(2)}
                   </span>
                 </div>
               ))}
@@ -128,15 +125,29 @@ const FloatingCart = () => {
               <button className="btn-continue-shopping" onClick={closeCheckout}>
                 Continue Shopping
               </button>
-              <button className="btn-proceed-payment">Proceed to Payment</button>
+              <button 
+                className="btn-proceed-payment" 
+                onClick={handleProceedToPayment}
+              >
+                Proceed to Payment
+              </button>
             </div>
 
             <p className="modal-note">
-              You will be redirected to the payment gateway after confirmation.
+              You will be redirected to a payment gateway after confirmation.
             </p>
           </div>
         </div>
       )}
+
+      {/* Customer Information Form Modal */}
+      <CheckoutFormModal
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        onSubmit={handleFormSubmit}
+        cartItems={cartItems}
+        totalPrice={totalPrice}
+      />
     </>
   );
 };

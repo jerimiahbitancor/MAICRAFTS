@@ -1,3 +1,4 @@
+// maicrafts/src/pages/Home.jsx
 import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/Home.css";

@@ -25,49 +25,50 @@ const ProductDetail = () => {
   const [size, setSize] = useState("");
   const [addOns, setAddOns] = useState("");
 
-  const totalPrice = product.price * quantity;
+  const getAddOnPrice = () => {
+    if (addOns.includes("₱50")) return 50;
+    if (addOns.includes("₱250")) return 250;
+    if (addOns.includes("₱350")) return 350;
+    return 0;
+  };
+  
+  const totalPrice = (product.price + getAddOnPrice()) * quantity;
 
-  // ⭐ FIXED: ADD TO CART MUST BE INSIDE THE COMPONENT
   const addToCart = () => {
     let cart = JSON.parse(localStorage.getItem("cart") || "[]");
   
-    // Look for existing product in cart
-    const existingItem = cart.find(
-      (item) =>
-        item.id === product.id &&
-        item.size === size &&
-        item.flowerQty === flowerQty &&
-        item.addOns === addOns
-    );
+    const uniqueKey =
+      size || flowerQty || addOns
+        ? `${product.id}-${size}-${flowerQty}-${addOns}`
+        : `${product.id}-${Date.now()}`;
+  
+    const existingItem = cart.find((item) => item.key === uniqueKey);
+  
+    const finalPrice = product.price + getAddOnPrice();
   
     if (existingItem) {
-      // Already in cart → just increase quantity
       existingItem.quantity += quantity;
-      existingItem.total = existingItem.price * existingItem.quantity;
+      existingItem.total = finalPrice * existingItem.quantity;
     } else {
-      // Add new item
-      const newItem = {
+      cart.push({
+        key: uniqueKey,
         id: product.id,
         title: product.title,
-        price: product.price,
+        price: finalPrice,
         img: selectedImage,
         quantity,
         flowerQty,
         size,
         addOns,
-        total: product.price * quantity,
-      };
-  
-      cart.push(newItem);
+        total: finalPrice * quantity,
+      });
     }
   
-    // Save back to localStorage
     localStorage.setItem("cart", JSON.stringify(cart));
-  
+    window.dispatchEvent(new Event("cart-updated"));
     alert("Added to cart!");
   };
   
-
   // Related products (3 random)
   const relatedProducts = products
     .filter((p) => p.id !== product.id)

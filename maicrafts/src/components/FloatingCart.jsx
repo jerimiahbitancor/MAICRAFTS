@@ -14,10 +14,16 @@ const FloatingCart = () => {
     setCartItems(stored);
   }, []);
 
-  // Update localStorage on change
+  // Sync when "cart-updated" event is fired
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-  }, [cartItems]);
+    const syncCart = () => {
+      const stored = JSON.parse(localStorage.getItem("cart") || "[]");
+      setCartItems(stored);
+    };
+
+    window.addEventListener("cart-updated", syncCart);
+    return () => window.removeEventListener("cart-updated", syncCart);
+  }, []);
 
   const toggleCart = () => setIsOpen(!isOpen);
 
@@ -28,12 +34,16 @@ const FloatingCart = () => {
 
   const closeCheckout = () => setIsCheckoutOpen(false);
 
-  const removeItem = (id) => {
-    const updated = cartItems.filter((item) => item.id !== id);
+  // ❌ was using item.id → breaks unique variations
+  const removeItem = (key) => {
+    const updated = cartItems.filter((item) => item.key !== key);
+    localStorage.setItem("cart", JSON.stringify(updated));
     setCartItems(updated);
+
+    // inform other components
+    window.dispatchEvent(new Event("cart-updated"));
   };
 
-  // FIX: uses your actual field "quantity"
   const totalPrice = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
@@ -41,7 +51,6 @@ const FloatingCart = () => {
 
   return (
     <>
-      {/* Floating Button */}
       <div className="floating-button" onClick={toggleCart}>
         <BsCart className="floating-icon" />
         {cartItems.length > 0 && (
@@ -49,7 +58,6 @@ const FloatingCart = () => {
         )}
       </div>
 
-      {/* Sliding Cart Panel */}
       <div className={`cart-panel ${isOpen ? "open" : ""}`}>
         <div className="cart-header">
           <h3>Your Cart</h3>
@@ -61,7 +69,7 @@ const FloatingCart = () => {
             <p className="empty-msg">Your cart is empty</p>
           ) : (
             cartItems.map((item) => (
-              <div className="cart-item" key={item.id}>
+              <div className="cart-item" key={item.key}>
                 <img src={item.img} alt={item.title} className="item-thumb" />
 
                 <div className="item-info">
@@ -73,7 +81,7 @@ const FloatingCart = () => {
                   <span className="item-qty">×{item.quantity}</span>
                   <BsTrash
                     className="remove-item"
-                    onClick={() => removeItem(item.id)}
+                    onClick={() => removeItem(item.key)}
                   />
                 </div>
               </div>
@@ -91,7 +99,6 @@ const FloatingCart = () => {
         </button>
       </div>
 
-      {/* Checkout Modal */}
       {isCheckoutOpen && (
         <div className="checkout-modal-overlay" onClick={closeCheckout}>
           <div className="checkout-modal" onClick={(e) => e.stopPropagation()}>
@@ -102,7 +109,7 @@ const FloatingCart = () => {
 
             <div className="modal-items">
               {cartItems.map((item) => (
-                <div className="modal-item" key={item.id}>
+                <div className="modal-item" key={item.key}>
                   <div className="modal-item-left">
                     <span className="modal-item-name">{item.title}</span>
                     <span className="modal-item-qty">×{item.quantity}</span>

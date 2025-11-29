@@ -14,6 +14,7 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
 
   const [uploadedImage, setUploadedImage] = useState(null);
 
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -28,11 +29,33 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
     }
   };
 
-  const handleSubmit = () => {
-    console.log("Form submitted:", formData);
-    alert("Custom order submitted successfully!");
-    onClose();  // Close the modal after submission
+  const handleSubmit = async () => {
+    const payload = {
+      ...formData,
+      uploadedImage, // base64 image string
+    };
+  
+    try {
+      const response = await fetch("http://localhost:4000/send-custom-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+  
+      const result = await response.json();
+  
+      if (result.success) {
+        alert("Custom order submitted successfully!");
+        onClose();
+      } else {
+        alert("Failed to send custom order.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("An error occurred while sending your order.");
+    }
   };
+  
 
   return (
     <>

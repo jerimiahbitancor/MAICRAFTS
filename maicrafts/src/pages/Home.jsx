@@ -3,20 +3,7 @@ import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/Home.css";
 import FloatingCart from "../components/FloatingCart.jsx";
-
-
-const products = [
-  { img: "/flower1.svg", title: "Eternal Rose Bouquet" },
-  { img: "/crochet1.svg", title: "Handmade Crochet Bunny" },
-  { img: "/flower2.svg", title: "Luxury Preserved Roses" },
-  { img: "/flower1.svg", title: "Eternal Rose Bouquet 2" },
-  { img: "/crochet1.svg", title: "Handmade Crochet Bunny 2" },
-  { img: "/flower2.svg", title: "Luxury Preserved Roses 2" },
-  { img: "https://i.imgur.com/9g0h1i2.jpg", title: "Luxury Preserved Roses 3" },
-  { img: "https://i.imgur.com/3j4k5l6.jpg", title: "Eternal Rose Bouquet 3" },
-  { img: "https://i.imgur.com/7m8n9o0.jpg", title: "Handmade Crochet Bunny 3" },
-  { img: "https://i.imgur.com/2p3q4r5.jpg", title: "Luxury Preserved Roses 4" },
-];
+import { products } from "../data/productsData.js";
 
 
 const Home = () => {
@@ -95,9 +82,14 @@ const Home = () => {
                           loading="lazy"
                         />
                         <div className="img-overlay"></div>
-                        <div className="product-info">
-                          <h5 className="product-title">{product.title}</h5>
+                        
+                      </div>
+                      <div className="product-info">
+                          
                         </div>
+                      <div className="product-details">
+                        <h5 className="product-title">{product.title}</h5>
+                        <p className="product-price">₱{product.price}</p>
                       </div>
                     </div>
                   </div>

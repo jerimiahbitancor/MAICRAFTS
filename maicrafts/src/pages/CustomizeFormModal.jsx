@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { X, Plus, Facebook, Instagram, Mail } from "lucide-react";
 import "../css/CustomizeFormModal.css";
+import emailjs from '@emailjs/browser';
 
 const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for control
   const [formData, setFormData] = useState({
@@ -9,15 +10,19 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
     customDescription: "",
     sizeScale: "",
     additionalRequests: "",
-    contactNumber: "",
+    customerEmail: "",  // Updated: Replaced contactNumber with customerEmail
   });
 
   const [uploadedImage, setUploadedImage] = useState(null);
-
+  const [errors, setErrors] = useState({});  // New: State for validation errors
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear error for this field when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   const handleImageUpload = (e) => {
@@ -29,42 +34,76 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
     }
   };
 
-  const handleSubmit = async () => {
-    const payload = {
-      ...formData,
-      uploadedImage, // base64 image string
-    };
-  
-    try {
-      const response = await fetch("http://localhost:4000/send-custom-order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-  
-      const result = await response.json();
-  
-      if (result.success) {
-        alert("Custom order submitted successfully!");
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.productType) {
+      newErrors.productType = "Please select a product type.";
+    }
+    if (!formData.customDescription.trim()) {
+      newErrors.customDescription = "Please describe your custom order.";
+    }
+    if (!formData.customerEmail.trim()) {  // Updated: Validate email instead of phone
+      newErrors.customerEmail = "Please enter your email address.";
+    } else if (!/\S+@\S+\.\S+/.test(formData.customerEmail.trim())) {
+      newErrors.customerEmail = "Please enter a valid email address.";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const resetForm = () => {
+    setFormData({
+      productType: "",
+      customDescription: "",
+      sizeScale: "",
+      additionalRequests: "",
+      customerEmail: "",  // Updated: Reset customerEmail
+    });
+    setUploadedImage(null);
+    setErrors({});
+  };
+
+  const handleSubmit = () => {
+    if (validateForm()) {
+      // Prepare data for EmailJS (map formData to template variables)
+      const templateParams = {
+        productType: formData.productType,
+        customDescription: formData.customDescription,
+        sizeScale: formData.sizeScale || "Not specified",
+        additionalRequests: formData.additionalRequests || "None",
+        customerEmail: formData.customerEmail,  // Updated: Use customerEmail (this is the recipient)
+        // Optional: If attaching image, add imageUrl here after uploading to Cloudinary
+      };
+
+      // Send email using EmailJS
+      emailjs.send(
+        'service_qxu1bhv',  // Replace with your EmailJS service ID
+        'template_qy8mwbr',  // Replace with your EmailJS template ID
+        templateParams,
+        's9m7Qu_NeupEAwhmQ'  // Replace with your EmailJS public key
+      )
+      .then((response) => {
+        console.log('Email sent successfully:', response);
+        alert("Custom order submitted successfully! A confirmation email has been sent to your email.");
+        resetForm();
         onClose();
-      } else {
-        alert("Failed to send custom order.");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("An error occurred while sending your order.");
+      })
+      .catch((error) => {
+        console.error('Email send failed:', error);
+        alert("Submission successful, but email failed to send. Please contact us directly.");
+        resetForm();
+        onClose();
+      });
     }
   };
   
 
   return (
     <>
-      {/* Removed: The trigger button, as the modal is now opened from Products.jsx */}
-
-      {isOpen && (  // Use the isOpen prop to control visibility
-        <div className="cfm-overlay" onClick={onClose}>  {/* Use onClose for overlay click */}
+      {isOpen && (
+        <div className="cfm-overlay" onClick={onClose}>
           <div className="cfm-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="cfm-closeBtn" onClick={onClose}>  {/* Use onClose for close button */}
+            <button className="cfm-closeBtn" onClick={onClose}>
               <X size={24} />
             </button>
 
@@ -76,7 +115,7 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
                 {/* 1. Product Type */}
                 <div className="cfm-section">
                   <label className="cfm-sectionLabel">
-                    <span className="cfm-number">1.</span> Select Product Type:
+                    <span className="cfm-number">1.</span> Select Product Type: <span style={{ color: 'red' }}>*</span>
                   </label>
 
                   <div className="cfm-checkboxGroup">
@@ -88,6 +127,7 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
                         checked={formData.productType === "Flower Bouquet"}
                         onChange={handleInputChange}
                         className="cfm-radio"
+                        required
                       />
                       <span>Flower Bouquet</span>
                     </label>
@@ -100,16 +140,18 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
                         checked={formData.productType === "Crochet Product"}
                         onChange={handleInputChange}
                         className="cfm-radio"
+                        required
                       />
                       <span>Crochet Product</span>
                     </label>
                   </div>
+                  {errors.productType && <p style={{ color: 'red', fontSize: '14px' }}>{errors.productType}</p>}
                 </div>
 
                 {/* 2. Description */}
                 <div className="cfm-section">
                   <label className="cfm-sectionLabel">
-                    <span className="cfm-number">2.</span> Describe Your Custom Order:
+                    <span className="cfm-number">2.</span> Describe Your Custom Order: <span style={{ color: 'red' }}>*</span>
                   </label>
                   <p className="cfm-helperText">
                     Include details such as colors, materials, or design ideas.
@@ -120,7 +162,10 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
                     onChange={handleInputChange}
                     className="cfm-textarea"
                     rows={4}
+                    placeholder="Describe your custom order here (e.g., colors, materials, design ideas)."
+                    required
                   />
+                  {errors.customDescription && <p style={{ color: 'red', fontSize: '14px' }}>{errors.customDescription}</p>}
                 </div>
 
                 {/* 3. Upload Image */}
@@ -129,7 +174,7 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
                     <span className="cfm-number">3.</span> Upload Inspiration Image:
                   </label>
                   <p className="cfm-helperText">
-                    Attach a sample image or sketch.
+                    Attach a sample image or sketch (optional).
                   </p>
 
                   <div className="cfm-uploadArea">
@@ -164,6 +209,7 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
                     value={formData.sizeScale}
                     onChange={handleInputChange}
                     className="cfm-input"
+                    placeholder="e.g.,120x120inches"
                   />
                 </div>
 
@@ -178,24 +224,27 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
                     value={formData.additionalRequests}
                     onChange={handleInputChange}
                     className="cfm-input"
+                    placeholder="Any special instructions or notes?"
                   />
                 </div>
 
                 {/* 6. Contact */}
                 <div className="cfm-section">
                   <label className="cfm-sectionLabel">
-                    <span className="cfm-number">6.</span> Contact Information:
+                    <span className="cfm-number">6.</span> Contact Information: <span style={{ color: 'red' }}>*</span>
                   </label>
 
                   <div className="cfm-contactInputs">
-                    <input
-                      type="text"
-                      name="contactNumber"
-                      placeholder="Mobile Number"
-                      value={formData.contactNumber}
+                    <input  // Updated: Changed to email input
+                      type="email"
+                      name="customerEmail"
+                      placeholder="Email Address (e.g., example@gmail.com)"
+                      value={formData.customerEmail}
                       onChange={handleInputChange}
                       className="cfm-input"
+                      required
                     />
+                    {errors.customerEmail && <p style={{ color: 'red', fontSize: '14px' }}>{errors.customerEmail}</p>}
                   </div>
 
                   <div className="cfm-socialLinks">

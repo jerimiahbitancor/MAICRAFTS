@@ -1,0 +1,218 @@
+.cfm-container {
+  font-family: Georgia, serif;
+}
+
+.cfm-triggerBtn {
+  padding: 14px 40px;
+  background-color: #d4a574;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+/* Overlay */
+.cfm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+/* Modal */
+.cfm-modal {
+  background-color: #6b4423;
+  border-radius: 16px;
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: auto;
+  position: relative;
+  border: 3px solid #d4a574;
+}
+
+.cfm-closeBtn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 5px;
+  z-index: 10;
+}
+
+.cfm-content {
+  padding: 50px 40px 40px;
+}
+
+.cfm-title {
+  font-size: 36px;
+  font-weight: normal;
+  font-style: italic;
+  text-align: center;
+  color: #fff;
+  margin-bottom: 40px;
+}
+
+/* Form Layout */
+.cfm-formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.cfm-section {
+  background-color: #d4a574;
+  padding: 25px;
+  border-radius: 8px;
+}
+
+.cfm-sectionLabel {
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 12px;
+}
+
+.cfm-number {
+  font-weight: bold;
+}
+
+.cfm-helperText {
+  font-size: 13px;
+  color: #000;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+/* Radio Buttons */
+.cfm-checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cfm-checkboxLabel {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #000;
+  cursor: pointer;
+}
+
+.cfm-radio {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  cursor: pointer;
+  accent-color: #6b4423;
+}
+
+/* Inputs */
+.cfm-textarea,
+.cfm-input {
+  width: 100%;
+  padding: 12px;
+  background-color: #fff;
+  border: 1px solid #8b6139;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #000;
+  font-family: Arial, sans-serif;
+}
+
+.cfm-textarea {
+  resize: vertical;
+}
+
+/* Upload Area */
+.cfm-uploadArea {
+  margin-top: 10px;
+}
+
+.cfm-fileInput {
+  display: none;
+}
+
+.cfm-uploadLabel {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.cfm-uploadPlaceholder {
+  width: 120px;
+  height: 120px;
+  background-color: #fff;
+  border: 2px dashed #8b6139;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8b6139;
+}
+
+.cfm-previewImage {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #8b6139;
+}
+
+/* Contact Inputs */
+.cfm-contactInputs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* Social Links */
+.cfm-socialLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cfm-socialItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #000;
+}
+
+.cfm-socialIcon {
+  background-color: #000;
+  color: #fff;
+  padding: 6px;
+  border-radius: 50%;
+}
+
+/* Submit Button */
+.cfm-submitBtn {
+  width: 80%;
+  margin: 0 auto;
+  padding: 16px;
+  background-color: #e8d4b8;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #6b4423;
+  cursor: pointer;
+  letter-spacing: 2px;
+}

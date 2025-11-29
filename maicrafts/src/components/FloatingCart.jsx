@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { BsCart, BsTrash, BsX } from "react-icons/bs";
 import "../components/components-css/FloatingCart.css";
 
-const FloatingCart = ({ cartItems = [], removeItem }) => {
+const FloatingCart = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
@@ -29,7 +29,6 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
         )}
       </div>
 
-      {/* Sliding Cart Panel */}
       <div className={`cart-panel ${isOpen ? "open" : ""}`}>
         <div className="cart-header">
           <h3>Your Cart</h3>
@@ -50,7 +49,7 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
                   <span className="item-qty">×{item.qty}</span>
                   <BsTrash
                     className="remove-item"
-                    onClick={() => removeItem(item.id)}
+                    onClick={() => handleRemoveItem(item.key)}
                   />
                 </div>
               </div>
@@ -79,7 +78,7 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
 
             <div className="modal-items">
               {cartItems.map((item) => (
-                <div className="modal-item" key={item.id}>
+                <div className="modal-item" key={item.key}>
                   <div className="modal-item-left">
                     <span className="modal-item-name">{item.name}</span>
                     <span className="modal-item-qty">×{item.qty}</span>

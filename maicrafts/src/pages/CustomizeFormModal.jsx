@@ -63,40 +63,38 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
     setErrors({});
   };
 
-  const handleSubmit = () => {
-    if (validateForm()) {
-      // Prepare data for EmailJS (map formData to template variables)
-      const templateParams = {
-        productType: formData.productType,
-        customDescription: formData.customDescription,
-        sizeScale: formData.sizeScale || "Not specified",
-        additionalRequests: formData.additionalRequests || "None",
-        customerEmail: formData.customerEmail,  // Updated: Use customerEmail (this is the recipient)
-        // Optional: If attaching image, add imageUrl here after uploading to Cloudinary
-      };
-
-      // Send email using EmailJS
-      emailjs.send(
-        'service_qxu1bhv',  // Replace with your EmailJS service ID
-        'template_qy8mwbr',  // Replace with your EmailJS template ID
-        templateParams,
-        's9m7Qu_NeupEAwhmQ'  // Replace with your EmailJS public key
-      )
-      .then((response) => {
-        console.log('Email sent successfully:', response);
-        alert("Custom order submitted successfully! A confirmation email has been sent to your email.");
-        resetForm();
-        onClose();
-      })
-      .catch((error) => {
-        console.error('Email send failed:', error);
-        alert("Submission successful, but email failed to send. Please contact us directly.");
-        resetForm();
-        onClose();
-      });
-    }
-  };
-
+const handleSubmit = () => {
+  if (validateForm()) {
+    // Prepare data for EmailJS (map formData to template variables)
+    const templateParams = {
+  productType: formData.productType,
+  customDescription: formData.customDescription,
+  sizeScale: formData.sizeScale || "Not specified",
+  additionalRequests: formData.additionalRequests || "None",
+  customerEmail: formData.customerEmail,
+  // Remove uploadedImage
+};
+    // Send email using EmailJS
+    emailjs.send(
+      'service_qxu1bhv',  // Your EmailJS service ID
+      'template_qy8mwbr',  // Your EmailJS template ID
+      templateParams,
+      's9m7Qu_NeupEAwhmQ'  // Your EmailJS public key
+    )
+    .then((response) => {
+      console.log('Email sent successfully:', response);
+      alert("Custom order submitted successfully! A confirmation email has been sent to your email.");
+      resetForm();
+      onClose();
+    })
+    .catch((error) => {
+      console.error('Email send failed:', error);
+      alert("Submission successful, but email failed to send. Please contact us directly.");
+      resetForm();
+      onClose();
+    });
+  }
+};
   return (
     <>
       {isOpen && (

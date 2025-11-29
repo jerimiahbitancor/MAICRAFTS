@@ -1,0 +1,244 @@
+/* CheckoutFormModal.css */
+:root {
+  --gold-color: #ffbd3a;
+  --dark-brown: #462c14;
+  --light-brown: #d4a574;
+  --white: #fff;
+}
+
+/* Form Modal Overlay */
+.checkout-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+  backdrop-filter: blur(5px);
+}
+
+/* Form Modal Container */
+.checkout-form-modal {
+  background: var(--dark-brown);
+  border-radius: 20px;
+  width: 90%;
+  max-width: 550px;
+  max-height: 90vh;
+  overflow-y: auto;
+  color: var(--white);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  animation: modalSlideIn 0.4s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Form Modal Header */
+.form-modal-header {
+  margin: 22px;
+  padding: 25px;
+  border-bottom: 1px solid var(--light-brown);
+  background-color: var(--dark-brown);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 22px;
+  z-index: 1;
+}
+
+.form-modal-header h2 {
+  margin: 0;
+  font-size: 1.6rem;
+  color: var(--gold-color);
+  font-family: 'Carattere', cursive;
+}
+
+.close-form-modal {
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: var(--gold-color);
+  transition: 0.3s;
+}
+
+.close-form-modal:hover {
+  color: var(--white);
+  transform: rotate(90deg);
+}
+
+/* Form Content */
+.form-content {
+  padding: 20px 35px;
+  font-family: 'Playfair Display', serif;
+}
+
+/* Form Group */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--gold-color);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  color: var(--white);
+  font-size: 1rem;
+  font-family: 'Playfair Display', serif;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--gold-color);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Error State */
+.form-group input.error,
+.form-group textarea.error {
+  border-color: #ff4444;
+}
+
+.error-message {
+  display: block;
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  margin-top: 6px;
+  font-style: italic;
+}
+
+/* Order Summary Mini */
+.order-summary-mini {
+  margin-top: 25px;
+  padding: 16px;
+  background: rgba(212, 165, 116, 0.15);
+  border-radius: 12px;
+  border: 1px solid var(--light-brown);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.summary-row.total {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--light-brown);
+  font-size: 1.2rem;
+  color: var(--gold-color);
+}
+
+.summary-row.total strong {
+  color: var(--gold-color);
+}
+
+/* Form Actions */
+.form-actions {
+  padding: 20px 35px 30px;
+  display: flex;
+  gap: 12px;
+}
+
+.btn-cancel {
+  flex: 1;
+  padding: 14px;
+  background: transparent;
+  border: 2px solid var(--light-brown);
+  color: var(--light-brown);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Playfair Display', serif;
+}
+
+.btn-cancel:hover {
+  background: var(--light-brown);
+  color: var(--dark-brown);
+  transform: translateY(-2px);
+}
+
+.btn-confirm-order {
+  flex: 1;
+  padding: 14px;
+  background: var(--gold-color);
+  color: var(--dark-brown);
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Playfair Display', serif;
+}
+
+.btn-confirm-order:hover {
+  background: #e6a830;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 189, 58, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .checkout-form-modal {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .form-content {
+    padding: 15px 25px;
+  }
+
+  .form-actions {
+    padding: 15px 25px 25px;
+    flex-direction: column;
+  }
+
+  .form-modal-header {
+    padding: 20px;
+    margin: 15px;
+  }
+
+  .form-modal-header h2 {
+    font-size: 1.4rem;
+  }
+}

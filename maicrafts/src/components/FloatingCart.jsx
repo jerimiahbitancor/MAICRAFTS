@@ -1,11 +1,13 @@
-// src/components/FloatingCart.jsxhjjgjh
+// src/components/FloatingCart.jsx
 import React, { useState } from "react";
 import { BsCart, BsTrash, BsX } from "react-icons/bs";
+import CheckoutFormModal from "./CheckoutFormModal";
 import "../components/components-css/FloatingCart.css";
 
 const FloatingCart = ({ cartItems = [], removeItem }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   const toggleCart = () => setIsOpen(!isOpen);
 
@@ -15,6 +17,26 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
   };
 
   const closeCheckout = () => setIsCheckoutOpen(false);
+
+  const handleProceedToPayment = () => {
+    setIsCheckoutOpen(false);
+    setIsFormOpen(true);
+  };
+
+  const handleFormSubmit = (formData) => {
+    // Handle the form submission here
+    console.log("Order Details:", {
+      customer: formData,
+      items: cartItems,
+      total: totalPrice
+    });
+    
+    // Close the form modal
+    setIsFormOpen(false);
+    
+    // You can add your payment gateway redirect or API call here
+    alert(`Thank you ${formData.firstName}! Your order has been received.`);
+  };
 
   const totalPrice = cartItems.reduce(
     (acc, item) => acc + item.price * item.qty,
@@ -50,9 +72,7 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
                 </div>
 
                 <div className="item-actions">
-                  {/* ✅ FIXED: show qty correctly */}
                   <span className="item-qty">×{item.qty}</span>
-
                   <BsTrash
                     className="remove-item"
                     onClick={() => removeItem(item.key)}
@@ -87,12 +107,8 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
                 <div className="modal-item" key={item.key}>
                   <div className="modal-item-left">
                     <span className="modal-item-name">{item.title}</span>
-
-                    {/* ✅ FIXED: qty */}
                     <span className="modal-item-qty">×{item.qty}</span>
                   </div>
-
-                  {/* ✅ FIXED: price calculation */}
                   <span className="modal-item-price">
                     ₱{(item.price * item.qty).toFixed(2)}
                   </span>
@@ -109,7 +125,12 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
               <button className="btn-continue-shopping" onClick={closeCheckout}>
                 Continue Shopping
               </button>
-              <button className="btn-proceed-payment">Proceed to Payment</button>
+              <button 
+                className="btn-proceed-payment" 
+                onClick={handleProceedToPayment}
+              >
+                Proceed to Payment
+              </button>
             </div>
 
             <p className="modal-note">
@@ -118,6 +139,15 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
           </div>
         </div>
       )}
+
+      {/* Customer Information Form Modal */}
+      <CheckoutFormModal
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        onSubmit={handleFormSubmit}
+        cartItems={cartItems}
+        totalPrice={totalPrice}
+      />
     </>
   );
 };

@@ -1,18 +1,20 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Navbar from "./components/Navbar.jsx";
 import Home from "./pages/Home.jsx";
 import Products from "./pages/Products.jsx";
 import ProductDetail from "./pages/ProductDetail.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
-import Footer from './components/Footer.jsx';
+import Footer from "./components/Footer.jsx";
 
 const App = () => {
   return (
     <Router>
       <Navbar />
 
+      {/* Routes */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
@@ -21,7 +23,10 @@ const App = () => {
         <Route path="/contact" element={<Contact />} />
       </Routes>
 
+      {/* Footer */}
       <Footer />
+
+    
     </Router>
   );
 };

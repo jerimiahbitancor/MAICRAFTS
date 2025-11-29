@@ -2,6 +2,8 @@
 import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/Home.css";
+import FloatingCart from "../components/FloatingCart.jsx";
+
 
 const products = [
   { img: "/flower1.svg", title: "Eternal Rose Bouquet" },
@@ -123,6 +125,8 @@ const Home = () => {
           </div>
         </div>
       </section>
+            <FloatingCart />
+
     </>
   );
 };

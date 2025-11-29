@@ -1,57 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Carattere&family=Instrument+Serif:ital@0;1&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+  --accent: #E6BB71;
+  --brown-dark: #462c14;
+  --brown-overlay: rgba(70, 44, 20, 0.65);
+  --gold: #EAB559;
+  --goldreal: #BC6400;
+}
+
+/* ===== MISSION & VISION SECTION ===== */
+.mission-vision {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: clamp(20px, 4vw, 40px);
+  padding: clamp(100px, 18vw, 180px) 5% clamp(80px, 12vw, 150px);
+  background-color: var(--brown-dark);
+}
+
+.mission, 
+.vision {
+  width: clamp(260px, 30%, 420px);
+  padding: 25px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.mission:hover, 
+.vision:hover {
+  transform: translateY(-6px);
+}
+
+.mission h2, 
+.vision h2 {
+  font-size: clamp(1.3rem, 2vw, 1.9rem);
+  margin-bottom: 15px;
+  color: var(--gold);
+  font-family: "Playfair Display", serif;
+}
+
+.mission p, 
+.vision p {
+  line-height: 1.6;
+  color: #fff;
+  font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+}
+/* ===== CENTER ARCH ===== */
+.center-arch {
+  width: clamp(240px, 24%, 380px);
+  height: clamp(240px, 32vw, 400px);
+  position: relative;
+  margin-top: 40px;
+  background: white;
+  border: 6px solid var(--goldreal);
+  border-bottom: none;
+  border-radius: 50% 50% 0 0;
+  overflow: hidden;
+  margin: 30px;
+  cursor: pointer;
+}
+
+/* ===== GOLD BASE BAR ===== */
+.center-arch::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: -5px;
+  width: calc(100% + 10px);
+  height: 14px;
+  background: var(--goldreal);
+  border-radius: 2px;
+}
+
+/* ===== VIDEO INSIDE ARCH ===== */
+.arch-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50% 50% 0 0;
+}
+
+.arch-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(188, 150, 40, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  border-radius: 50% 50% 0 0;
+}
+
+.arch-overlay span {
+  color: var(--brown-dark);
+  font-size: 2rem;
+  font-family: "Playfair Display", serif;
+  letter-spacing: 2px;
+  opacity: 0;
+  font-weight: 100;
+  transform: translateY(10px);
+  transition: 0.35s ease;
+}
+
+.center-arch:hover .arch-overlay {
+  opacity: 1;
+}
+
+.center-arch:hover .arch-overlay span {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 
-    /* Mission & Vision Section */
-    .mission-vision {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-start;
-    padding: 80px 50px;
-    position: relative;
-    }
+/* ===== OUR WORK SECTION ===== */
+.our-work {
+  text-align: center;
+  padding: clamp(60px, 10vw, 100px) 5%;
+  background: var(--brown-dark);
+}
 
-    .mission, .vision {
-    width: 30%;
-    }
+/* TITLE WITH LINES */
+.our-work h2 {
+  font-size: clamp(1.5rem, 2.3vw, 2rem);
+  margin-bottom: 25px;
+  color: var(--gold);
+  font-family: "Playfair Display", serif;
+  position: relative;
+  display: inline-block;
+  padding: 0 20px;
+}
 
-    .mission h2, .vision h2 {
-    font-size: 28px;
-    margin-bottom: 20px;
-    }
+.our-work h2::before,
+.our-work h2::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: clamp(60px, 18vw, 220px);
+  height: 2px;
+  background-color: var(--gold);
+}
 
-    .mission p, .vision p {
-    line-height: 1.6;
-    }
+.our-work h2::before { left: calc(-1 * (clamp(60px, 18vw, 220px))); }
+.our-work h2::after  { right: calc(-1 * (clamp(60px, 18vw, 220px))); }
 
-    /* Center arch placeholder */
-    .center-arch {
-    width: 30%;
-    height: 250px;
-    border: 5px solid #F3D27F;
-    border-radius: 50% 50% 0 0;
-    margin-top: 50px;
-    }
+.our-work p {
+  margin-bottom: 40px;
+  line-height: 1.6;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+width: min(1200px, 90%);
+  margin-left: auto;
+  margin-right: auto;
+  font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+  align-content: justify;
+}
 
-    /* Our Work Section */
-    .our-work {
-    text-align: center;
-    padding: 80px 50px;
-    border-top: 1px solid #F3D27F;
-    }
+/* GALLERY BOX */
+.work-gallery {
+  width: min(800px, 90%);
+  min-height: 200px;
+  margin: 0 auto;
+  border: 3px dashed #F3D27F;
+  padding: 20px;
+  background: transparent;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
 
-    .our-work h2 {
-    font-size: 28px;
-    margin-bottom: 20px;
-    }
+/* ===== SMALL DEVICE FIXES ===== */
+@media (max-width: 700px) {
+  .mission, .vision {
+    width: 90%;
+  }
 
-    .our-work p {
-    margin-bottom: 40px;
-    line-height: 1.6;
-    }
+  .center-arch {
+    width: 90%;
+    height: clamp(440px, 60vw, 400px);
+  }
 
-    .work-gallery {
-    width: 80%;
-    height: 200px;
-    margin: 0 auto;
-    border: 3px dashed #F3D27F;
-    background: transparent;
-    }
+  .our-work h2::before,
+  .our-work h2::after {
+    width: 22vw;
+  }
+}
+
+@media (max-width: 400px) {
+  .mission, .vision {
+    padding: 10px;
+  }
+
+  .center-arch {
+    height: clamp(300px, 55vw, 280px);
+  }
+
+  .our-work h2::before,
+  .our-work h2::after {
+    width: 18vw;
+  }
+}
+
+@media (max-width: 300px) {
+  .center-arch {
+    height: 300px;
+  }
+}

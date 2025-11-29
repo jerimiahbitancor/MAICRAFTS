@@ -52,7 +52,6 @@ MaiCrafts aims to build a strong presence in online marketplaces and social medi
           {/* Placeholder for images or projects */}
         </div>
       </section>
-            <FloatingCart />
 
     </>
   );

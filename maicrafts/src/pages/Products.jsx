@@ -200,7 +200,6 @@ const Products = () => {
         </div>
       </div>
     </section>
-    <FloatingCart cartItems={cartItems} removeItem={removeItem} />
   </>
 );
 };

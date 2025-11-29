@@ -1,85 +1,168 @@
-/* Floating Circular Button */
+/* Floating Cart Theme - Shopee style inspired */
+:root {
+  --gold-color: #ffbd3a;
+  --dark-brown: #462c14;
+  --overlay-brown: rgba(70, 44, 20, 0.95);
+  --white: #fff;
+}
+
+/* Floating Button */
 .floating-button {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
+  bottom: 25px;
+  right: 25px;
   width: 60px;
   height: 60px;
-  background: #ffd700; /* bright yellow */
+  background: var(--gold-color);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  z-index: 9999; /* very high to show above everything */
+  transition: transform 0.3s ease;
+  z-index: 9999;
 }
 
 .floating-button:hover {
   transform: scale(1.1);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
 }
 
 .floating-icon {
-  color: #000; /* black icon for contrast */
   font-size: 1.8rem;
+  color: var(--dark-brown);
 }
 
-/* Sliding Cart Panel */
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+
+/* Cart Panel */
 .cart-panel {
   position: fixed;
-  bottom: -420px; /* hidden offscreen */
+  bottom: -500px;
   right: 20px;
-  width: 300px;
-  max-height: 400px;
-  background: #fff;
-  border-radius: 16px 16px 0 0;
-  box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.25);
+  width: 350px;
+  max-height: 450px;
+  background: var(--overlay-brown);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -6px 30px rgba(0,0,0,0.4);
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
   transition: bottom 0.4s ease-in-out;
   z-index: 9999;
+  color: var(--white);
+  font-family: 'Playfair Display', serif;
+  overflow: hidden;
 }
 
-/* Open state */
+/* Open State */
 .cart-panel.open {
-  bottom: 90px; /* slide up above button */
+  bottom: 90px;
 }
 
-/* Cart content */
+/* Cart Header */
 .cart-panel h3 {
-  margin: 0;
-  color: #000;
-  font-size: 1.2rem;
+  margin: 0 0 10px;
+  font-family: 'Carattere', cursive;
+  font-size: 1.5rem;
   text-align: center;
+  border-bottom: 1px solid var(--gold-color);
+  padding-bottom: 8px;
 }
 
+/* Cart Items */
 .cart-items {
   flex: 1;
   overflow-y: auto;
-  font-size: 0.95rem;
-  color: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
 }
 
-.cart-items p {
-  margin: 5px 0;
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px 12px;
+  border-radius: 12px;
+  transition: background 0.2s ease;
 }
 
-/* Checkout button */
+.cart-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.item-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-name {
+  font-weight: 600;
+}
+
+.item-price {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.item-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.item-qty {
+  font-weight: 500;
+}
+
+.remove-item {
+  cursor: pointer;
+  color: red;
+  font-size: 1.1rem;
+}
+
+/* Cart Footer */
+.cart-footer {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 12px 0;
+}
+
+/* Checkout Button */
 .checkout-btn {
-  background: #ffd700;
-  color: #000;
+  background: var(--gold-color);
+  color: var(--dark-brown);
   border: none;
   border-radius: 12px;
-  padding: 10px;
+  padding: 12px;
   cursor: pointer;
-  font-weight: 600;
-  transition: background 0.3s ease;
+  font-weight: 700;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .checkout-btn:hover {
-  background: #e6c200;
+  background: #e6aa30;
+  transform: scale(1.03);
+}
+
+/* Empty Cart Message */
+.empty-msg {
+  text-align: center;
+  opacity: 0.8;
+  font-style: italic;
 }

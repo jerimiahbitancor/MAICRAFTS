@@ -1,0 +1,57 @@
+
+
+    /* Mission & Vision Section */
+    .mission-vision {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 80px 50px;
+    position: relative;
+    }
+
+    .mission, .vision {
+    width: 30%;
+    }
+
+    .mission h2, .vision h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    }
+
+    .mission p, .vision p {
+    line-height: 1.6;
+    }
+
+    /* Center arch placeholder */
+    .center-arch {
+    width: 30%;
+    height: 250px;
+    border: 5px solid #F3D27F;
+    border-radius: 50% 50% 0 0;
+    margin-top: 50px;
+    }
+
+    /* Our Work Section */
+    .our-work {
+    text-align: center;
+    padding: 80px 50px;
+    border-top: 1px solid #F3D27F;
+    }
+
+    .our-work h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    }
+
+    .our-work p {
+    margin-bottom: 40px;
+    line-height: 1.6;
+    }
+
+    .work-gallery {
+    width: 80%;
+    height: 200px;
+    margin: 0 auto;
+    border: 3px dashed #F3D27F;
+    background: transparent;
+    }

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"; // Import Link
 import "../css/Products.css";
 import { BsCart } from "react-icons/bs";
 import FloatingCart from "../components/FloatingCart.jsx";
-
+//
 const productItems = [
   {
     id: "crochet-hello-kitty",

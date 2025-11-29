@@ -8,6 +8,7 @@ import { products } from "../data/productsData";
 const ProductDetail = () => {
   const { id } = useParams();
 
+  // Find product
   const product = products.find((p) => p.id === id);
 
   if (!product) {
@@ -17,6 +18,7 @@ const ProductDetail = () => {
   // Use product thumbnails or fallback
   const thumbnails = product.images || [product.img];
 
+  // States
   const [selectedImage, setSelectedImage] = useState(thumbnails[0]);
   const [quantity, setQuantity] = useState(1);
   const [flowerQty, setFlowerQty] = useState("");
@@ -25,11 +27,52 @@ const ProductDetail = () => {
 
   const totalPrice = product.price * quantity;
 
-  // Generate related products (3 random items, excluding this product)
+  // ⭐ FIXED: ADD TO CART MUST BE INSIDE THE COMPONENT
+  const addToCart = () => {
+    let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  
+    // Look for existing product in cart
+    const existingItem = cart.find(
+      (item) =>
+        item.id === product.id &&
+        item.size === size &&
+        item.flowerQty === flowerQty &&
+        item.addOns === addOns
+    );
+  
+    if (existingItem) {
+      // Already in cart → just increase quantity
+      existingItem.quantity += quantity;
+      existingItem.total = existingItem.price * existingItem.quantity;
+    } else {
+      // Add new item
+      const newItem = {
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        img: selectedImage,
+        quantity,
+        flowerQty,
+        size,
+        addOns,
+        total: product.price * quantity,
+      };
+  
+      cart.push(newItem);
+    }
+  
+    // Save back to localStorage
+    localStorage.setItem("cart", JSON.stringify(cart));
+  
+    alert("Added to cart!");
+  };
+  
+
+  // Related products (3 random)
   const relatedProducts = products
-  .filter((p) => p.id !== product.id)  
-  .sort(() => Math.random() - 0.5)    
-  .slice(0, 3);                        
+    .filter((p) => p.id !== product.id)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 3);                      
 
   return (
     <div className="product-detail-page">
@@ -126,7 +169,7 @@ const ProductDetail = () => {
             <div className="total-section">
               <div className="total">Total: ₱{totalPrice.toFixed(2)}</div>
               <div className="button-group">
-                <button className="btn-add-cart">
+                <button className="btn-add-cart" onClick={addToCart}>
                   <ShoppingCart size={20} /> Add to Cart
                 </button>
                 <button className="btn-buy-now">Buy Now</button>

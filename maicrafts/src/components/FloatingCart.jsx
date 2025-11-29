@@ -1,24 +1,47 @@
 // src/components/FloatingCart.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BsCart, BsTrash, BsX } from "react-icons/bs";
 import "../components/components-css/FloatingCart.css";
 
 const FloatingCart = ({ cartItems = [], removeItem }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
+
+  // Load cart on mount
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("cart") || "[]");
+    setCartItems(stored);
+  }, []);
+
+  // Update localStorage on change
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+  }, [cartItems]);
 
   const toggleCart = () => setIsOpen(!isOpen);
+
   const openCheckout = () => {
     setIsCheckoutOpen(true);
     setIsOpen(false);
   };
+
   const closeCheckout = () => setIsCheckoutOpen(false);
 
-  const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
+  const removeItem = (id) => {
+    const updated = cartItems.filter((item) => item.id !== id);
+    setCartItems(updated);
+  };
+
+  // FIX: uses your actual field "quantity"
+  const totalPrice = cartItems.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
 
   return (
     <>
-      {/* Floating Cart Button */}
+      {/* Floating Button */}
       <div className="floating-button" onClick={toggleCart}>
         <BsCart className="floating-icon" />
         {cartItems.length > 0 && (
@@ -39,12 +62,15 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
           ) : (
             cartItems.map((item) => (
               <div className="cart-item" key={item.id}>
+                <img src={item.img} alt={item.title} className="item-thumb" />
+
                 <div className="item-info">
-                  <span className="item-name">{item.name}</span>
+                  <span className="item-name">{item.title}</span>
                   <span className="item-price">₱{item.price.toFixed(2)}</span>
                 </div>
+
                 <div className="item-actions">
-                  <span className="item-qty">×{item.qty}</span>
+                  <span className="item-qty">×{item.quantity}</span>
                   <BsTrash
                     className="remove-item"
                     onClick={() => removeItem(item.id)}
@@ -65,7 +91,7 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
         </button>
       </div>
 
-      {/* CHECKOUT MODAL */}
+      {/* Checkout Modal */}
       {isCheckoutOpen && (
         <div className="checkout-modal-overlay" onClick={closeCheckout}>
           <div className="checkout-modal" onClick={(e) => e.stopPropagation()}>
@@ -78,11 +104,11 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
               {cartItems.map((item) => (
                 <div className="modal-item" key={item.id}>
                   <div className="modal-item-left">
-                    <span className="modal-item-name">{item.name}</span>
-                    <span className="modal-item-qty">×{item.qty}</span>
+                    <span className="modal-item-name">{item.title}</span>
+                    <span className="modal-item-qty">×{item.quantity}</span>
                   </div>
                   <span className="modal-item-price">
-                    ₱{(item.price * item.qty).toFixed(2)}
+                    ₱{(item.price * item.quantity).toFixed(2)}
                   </span>
                 </div>
               ))}
@@ -97,13 +123,11 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
               <button className="btn-continue-shopping" onClick={closeCheckout}>
                 Continue Shopping
               </button>
-              <button className="btn-proceed-payment">
-                Proceed to Payment
-              </button>
+              <button className="btn-proceed-payment">Proceed to Payment</button>
             </div>
 
             <p className="modal-note">
-              You will be redirected to payment gateway after confirmation.
+              You will be redirected to the payment gateway after confirmation.
             </p>
           </div>
         </div>

@@ -69,7 +69,7 @@ const Navbar = () => {
         <div className="mobile-nav">
           <div className="mobile-top">
             <div className="mobile-logo-circle">
-              <img src="logo.webp" alt="maicraftslogo" />
+              <img src="/maicrafts_logo.svg" alt="maicrafts logo" />
             </div>
 
             <button

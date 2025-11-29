@@ -88,10 +88,10 @@ const ProductDetail = () => {
                 <label className="label">Quantity of Flower</label>
                 <select value={flowerQty} onChange={(e) => setFlowerQty(e.target.value)} className="select">
                   <option value="">Choose...</option>
-                  <option>3 Flowers</option>
                   <option>5 Flowers</option>
-                  <option>9 Flowers</option>
                   <option>12 Flowers</option>
+                  <option>24 Flowers</option>
+                  <option>50 Flowers</option>
                 </select>
               </div>
               <div className="half">

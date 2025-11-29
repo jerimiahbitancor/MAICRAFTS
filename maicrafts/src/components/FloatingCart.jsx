@@ -1,4 +1,4 @@
-// src/components/FloatingCart.jsx
+// src/components/FloatingCart.jsxhjjgjh
 import React, { useState } from "react";
 import { BsCart, BsTrash, BsX } from "react-icons/bs";
 import "../components/components-css/FloatingCart.css";

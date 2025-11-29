@@ -3,8 +3,7 @@ import { useState } from "react";
 import { X, Plus, Facebook, Instagram, Mail } from "lucide-react";
 import "../css/CustomizeFormModal.css";
 
-const CustomizeFormModal = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for control
   const [formData, setFormData] = useState({
     productType: "",
     customDescription: "",
@@ -32,19 +31,17 @@ const CustomizeFormModal = () => {
   const handleSubmit = () => {
     console.log("Form submitted:", formData);
     alert("Custom order submitted successfully!");
-    setIsOpen(false);
+    onClose();  // Close the modal after submission
   };
 
   return (
-    <div className="cfm-container">
-      <button className="cfm-triggerBtn" onClick={() => setIsOpen(true)}>
-        Customize!
-      </button>
+    <>
+      {/* Removed: The trigger button, as the modal is now opened from Products.jsx */}
 
-      {isOpen && (
-        <div className="cfm-overlay" onClick={() => setIsOpen(false)}>
+      {isOpen && (  // Use the isOpen prop to control visibility
+        <div className="cfm-overlay" onClick={onClose}>  {/* Use onClose for overlay click */}
           <div className="cfm-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="cfm-closeBtn" onClick={() => setIsOpen(false)}>
+            <button className="cfm-closeBtn" onClick={onClose}>  {/* Use onClose for close button */}
               <X size={24} />
             </button>
 
@@ -204,7 +201,7 @@ const CustomizeFormModal = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

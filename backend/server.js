@@ -10,8 +10,8 @@ app.use(express.json({ limit: "25mb" })); // IMPORTANT for Base64 images
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "plppasig2@gmail.com",
-    pass: "YOUR_APP_PASSWORD",
+    user: "technoerror404@gmail.com",
+    pass: "mefu lpsl wlmv bagm",
   },
 });
 

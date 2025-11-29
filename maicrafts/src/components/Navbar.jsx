@@ -39,7 +39,7 @@ const Navbar = () => {
               {/* Center Logo */}
               <div className="logo-wrapper">
                 <div className="logo-circle">
-                  <img src="../assets/maicrafts_logo.svg" alt="maicraftslogo" />
+                  <img src="../src/assets/maicrafts_logo.svg" alt="maicraftslogo" />
                 </div>
               </div>
 

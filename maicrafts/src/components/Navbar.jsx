@@ -36,7 +36,7 @@ const Navbar = () => {
                 ))}
               </div>
 
-              {/* Center Logo */}
+              {/* Cenntefr Logo */}
 <div className="logo-wrapper">
   <div className="logo-circle">
     <img src="/maicrafts_logo.svg" alt="maicrafts logo" />

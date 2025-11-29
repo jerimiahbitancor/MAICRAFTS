@@ -13,10 +13,15 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
   });
 
   const [uploadedImage, setUploadedImage] = useState(null);
+  const [errors, setErrors] = useState({});  // New: State for validation errors
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear error for this field when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   const handleImageUpload = (e) => {
@@ -28,20 +33,50 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
     }
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.productType) {
+      newErrors.productType = "Please select a product type.";
+    }
+    if (!formData.customDescription.trim()) {
+      newErrors.customDescription = "Please describe your custom order.";
+    }
+    if (!formData.contactNumber.trim()) {
+      newErrors.contactNumber = "Please enter your contact number.";
+    } else if (!/^(09\d{9}|\+63\d{9})$/.test(formData.contactNumber.trim())) {
+      newErrors.contactNumber = "Please enter a valid Philippine mobile number (e.g., 09123456789 or +639123456789).";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const resetForm = () => {
+    setFormData({
+      productType: "",
+      customDescription: "",
+      sizeScale: "",
+      additionalRequests: "",
+      contactNumber: "",
+    });
+    setUploadedImage(null);
+    setErrors({});
+  };
+
   const handleSubmit = () => {
-    console.log("Form submitted:", formData);
-    alert("Custom order submitted successfully!");
-    onClose();  // Close the modal after submission
+    if (validateForm()) {
+      console.log("Form submitted:", formData);
+      alert("Custom order submitted successfully!");
+      resetForm();  // Reset form after successful submission
+      onClose();  // Close the modal after submission
+    }
   };
 
   return (
     <>
-      {/* Removed: The trigger button, as the modal is now opened from Products.jsx */}
-
-      {isOpen && (  // Use the isOpen prop to control visibility
-        <div className="cfm-overlay" onClick={onClose}>  {/* Use onClose for overlay click */}
+      {isOpen && (
+        <div className="cfm-overlay" onClick={onClose}>
           <div className="cfm-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="cfm-closeBtn" onClick={onClose}>  {/* Use onClose for close button */}
+            <button className="cfm-closeBtn" onClick={onClose}>
               <X size={24} />
             </button>
 
@@ -53,7 +88,7 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
                 {/* 1. Product Type */}
                 <div className="cfm-section">
                   <label className="cfm-sectionLabel">
-                    <span className="cfm-number">1.</span> Select Product Type:
+                    <span className="cfm-number">1.</span> Select Product Type: <span style={{ color: 'red' }}>*</span>
                   </label>
 
                   <div className="cfm-checkboxGroup">
@@ -65,6 +100,7 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
                         checked={formData.productType === "Flower Bouquet"}
                         onChange={handleInputChange}
                         className="cfm-radio"
+                        required
                       />
                       <span>Flower Bouquet</span>
                     </label>
@@ -77,16 +113,18 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
                         checked={formData.productType === "Crochet Product"}
                         onChange={handleInputChange}
                         className="cfm-radio"
+                        required
                       />
                       <span>Crochet Product</span>
                     </label>
                   </div>
+                  {errors.productType && <p style={{ color: 'red', fontSize: '14px' }}>{errors.productType}</p>}
                 </div>
 
                 {/* 2. Description */}
                 <div className="cfm-section">
                   <label className="cfm-sectionLabel">
-                    <span className="cfm-number">2.</span> Describe Your Custom Order:
+                    <span className="cfm-number">2.</span> Describe Your Custom Order: <span style={{ color: 'red' }}>*</span>
                   </label>
                   <p className="cfm-helperText">
                     Include details such as colors, materials, or design ideas.
@@ -97,7 +135,10 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
                     onChange={handleInputChange}
                     className="cfm-textarea"
                     rows={4}
+                    placeholder="Describe your custom order here (e.g., colors, materials, design ideas)."
+                    required
                   />
+                  {errors.customDescription && <p style={{ color: 'red', fontSize: '14px' }}>{errors.customDescription}</p>}
                 </div>
 
                 {/* 3. Upload Image */}
@@ -106,7 +147,7 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
                     <span className="cfm-number">3.</span> Upload Inspiration Image:
                   </label>
                   <p className="cfm-helperText">
-                    Attach a sample image or sketch.
+                    Attach a sample image or sketch (optional).
                   </p>
 
                   <div className="cfm-uploadArea">
@@ -141,6 +182,7 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
                     value={formData.sizeScale}
                     onChange={handleInputChange}
                     className="cfm-input"
+                    placeholder="e.g.,120x120inches"
                   />
                 </div>
 
@@ -155,24 +197,27 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
                     value={formData.additionalRequests}
                     onChange={handleInputChange}
                     className="cfm-input"
+                    placeholder="Any special instructions or notes?"
                   />
                 </div>
 
                 {/* 6. Contact */}
                 <div className="cfm-section">
                   <label className="cfm-sectionLabel">
-                    <span className="cfm-number">6.</span> Contact Information:
+                    <span className="cfm-number">6.</span> Contact Information: <span style={{ color: 'red' }}>*</span>
                   </label>
 
                   <div className="cfm-contactInputs">
                     <input
                       type="text"
                       name="contactNumber"
-                      placeholder="Mobile Number"
+                      placeholder="Mobile Number (e.g., 09123456789)"
                       value={formData.contactNumber}
                       onChange={handleInputChange}
                       className="cfm-input"
+                      required
                     />
+                    {errors.contactNumber && <p style={{ color: 'red', fontSize: '14px' }}>{errors.contactNumber}</p>}
                   </div>
 
                   <div className="cfm-socialLinks">

@@ -1,0 +1,237 @@
+/* Page Layout */
+.page-title {
+  font-size: 2.6rem;
+  margin-bottom: 2rem;
+  color: var(--brown-dark);
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--brown-dark);
+  cursor: pointer;
+}
+
+/* Buttons */
+.btn-primary {
+  background: var(--gold);
+  color: var(--brown-dark);
+  border: none;
+  padding: 0.9rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(255, 189, 58, 0.3);
+}
+
+.btn-primary:hover {
+  background: #ffa000;
+  transform: translateY(-3px);
+}
+
+.btn-secondary {
+  background: #ddd;
+  color: #444;
+  padding: 0.9rem 2rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Stats Dashboard */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.stat-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(70,44,20,0.08);
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.stat-card h3 {
+  font-size: 1.1rem;
+  color: #888;
+  margin-bottom: 0.5rem;
+}
+
+.stat-number {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--gold);
+  font-family: 'Playfair Display', serif;
+}
+
+/* Table */
+.table-container {
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(70,44,20,0.08);
+  border: 1px solid var(--border);
+}
+
+.products-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.products-table th {
+  background: var(--brown-dark);
+  color: white;
+  padding: 1.2rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.products-table td {
+  padding: 1.2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.products-table tr:hover {
+  background: #fff9f0;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.icon-btn.edit { color: var(--accent); }
+.icon-btn.edit:hover { background: #f0e6d9; }
+
+.icon-btn.delete { color: #e74c3c; }
+.icon-btn.delete:hover { background: #fdf2f0; }
+
+/* Form */
+.form-card {
+  background: white;
+  padding: 3rem;
+  border-radius: 24px;
+  box-shadow: 0 15px 50px rgba(70,44,20,0.1);
+  border: 1px solid var(--border);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.form-group.full { grid-column: 1 / -1; }
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-weight: 600;
+  color: var(--brown-dark);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 1rem 1.2rem;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(230,187,113,0.2);
+}
+
+.upload-section {
+  margin: 2.5rem 0;
+}
+
+.upload-box {
+  border: 3px dashed var(--accent);
+  border-radius: 18px;
+  padding: 3rem;
+  text-align: center;
+  background: #fff9f0;
+  position: relative;
+  cursor: pointer;
+}
+
+.upload-box input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.upload-box p { margin: 1rem 0 0.5rem; color: var(--brown-dark); }
+.upload-box span { color: #888; font-size: 0.9rem; }
+
+.image-preview {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.image-preview img {
+  max-height: 340px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.remove-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.5rem;
+  margin-top: 3rem;
+}

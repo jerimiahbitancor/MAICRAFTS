@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Carattere&family=Instrument+Serif:ital@0;1&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+  --accent: #E6BB71;
+  --brown-dark: #462c14;
+  --brown-overlay: rgba(70, 44, 20, 0.65);
+  --gold: #FFBD3A;
+  --light: #fdf8f0;
+  --gray: #f5f0e8;
+  --border: #e6d9c7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Raleway', sans-serif;
+  background: var(--light);
+  color: var(--brown-dark);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+/* Layout */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 280px;
+  padding: 2.5rem;
+  transition: margin 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .main-content { margin-left: 0; padding: 1.5rem; }
+}

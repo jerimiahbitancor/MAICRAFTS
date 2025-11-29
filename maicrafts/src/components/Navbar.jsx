@@ -1,62 +1,66 @@
-import React, { useState } from 'react';
-import { IoMdClose, IoMdMenu } from 'react-icons/io';
-import { Link, useLocation } from 'react-router-dom';
-import './components-css/Navbar.css';
+import React, { useState } from "react";
+import { IoMdClose, IoMdMenu } from "react-icons/io";
+import { Link, useLocation } from "react-router-dom";
+import "./components-css/Navbar.css";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation(); // To track current route
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Products', path: '/products' },
-    { name: 'About Us', path: '/about-us' },
-    { name: 'Contact', path: '/contact' }
+    { name: "Home", path: "/" },
+    { name: "Products", path: "/products" },
+    { name: "About Us", path: "/about-us" },
+    { name: "Contact", path: "/contact" },
   ];
 
   return (
     <nav className="nav-container">
       <div className="nav-inner">
-
         {/* Desktop */}
         <div className="desktop-nav">
           <div className="nav-bar">
             <div className="nav-content">
-
               {/* Left Links */}
               <div className="nav-links">
-                {navLinks.filter((l, i) => i < 2).map(link => (
-                  <Link
-                    key={link.name}
-                    to={link.path}
-                    className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
-                  >
-                    {link.name}
-                  </Link>
-                ))}
+                {navLinks
+                  .filter((l, i) => i < 2)
+                  .map((link) => (
+                    <Link
+                      key={link.name}
+                      to={link.path}
+                      className={`nav-link ${
+                        location.pathname === link.path ? "active" : ""
+                      }`}
+                    >
+                      {link.name}
+                    </Link>
+                  ))}
               </div>
 
-              {/* Cenntefr Logo */}
-<div className="logo-wrapper">
-  <div className="logo-circle">
-    <img src="/maicrafts_logo.svg" alt="maicrafts logo" />
-  </div>
-</div>
-
+              {/* Center Logo */}
+              <div className="logo-wrapper">
+                <div className="logo-circle">
+                  <img src="/maicrafts_logo.svg" alt="maicrafts logo" />
+                </div>
+              </div>
 
               {/* Right Links */}
               <div className="nav-links">
-                {navLinks.filter((l, i) => i >= 2).map(link => (
-                  <Link
-                    key={link.name}
-                    to={link.path}
-                    className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
-                  >
-                    {link.name}
-                  </Link>
-                ))}
+                {navLinks
+                  .filter((l, i) => i >= 2)
+                  .map((link) => (
+                    <Link
+                      key={link.name}
+                      to={link.path}
+                      className={`nav-link ${
+                        location.pathname === link.path ? "active" : ""
+                      }`}
+                    >
+                      {link.name}
+                    </Link>
+                  ))}
               </div>
-
             </div>
           </div>
         </div>
@@ -65,7 +69,7 @@ const Navbar = () => {
         <div className="mobile-nav">
           <div className="mobile-top">
             <div className="mobile-logo-circle">
-              <img src="logo.webp" alt="maicraftslogo" />
+              <img src="/maicrafts_logo.svg" alt="maicrafts logo" />
             </div>
 
             <button
@@ -78,12 +82,14 @@ const Navbar = () => {
 
           {isMenuOpen && (
             <div className="dropdown">
-              {navLinks.map(link => (
+              {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   to={link.path}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`dropdown-link ${location.pathname === link.path ? 'active' : ''}`}
+                  className={`dropdown-link ${
+                    location.pathname === link.path ? "active" : ""
+                  }`}
                 >
                   {link.name}
                 </Link>
@@ -91,7 +97,6 @@ const Navbar = () => {
             </div>
           )}
         </div>
-
       </div>
     </nav>
   );

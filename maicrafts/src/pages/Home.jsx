@@ -71,7 +71,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* FEATURED PRODUCTS */}
+      {/* FEATURED PRODUhCTS */}
       <section id="products" className="featured-prod py-5 py-md-7">
         <div className="container">
           <div className="section-title mb-5 mb-md-6">

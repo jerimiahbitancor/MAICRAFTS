@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { BsCart, BsTrash, BsX } from "react-icons/bs";
 import "../components/components-css/FloatingCart.css";
 
-const FloatingCart = ({ cartItems = [], removeItem }) => {
+const FloatingCart = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
@@ -14,7 +14,7 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
     setCartItems(stored);
   }, []);
 
-  // Sync when "cart-updated" event is fired
+  // Sync when "cart-updated" event fires
   useEffect(() => {
     const syncCart = () => {
       const stored = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -34,13 +34,11 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
 
   const closeCheckout = () => setIsCheckoutOpen(false);
 
-  // ❌ was using item.id → breaks unique variations
-  const removeItem = (key) => {
+  // REMOVE ITEM — fixed and clean
+  const handleRemoveItem = (key) => {
     const updated = cartItems.filter((item) => item.key !== key);
     localStorage.setItem("cart", JSON.stringify(updated));
     setCartItems(updated);
-
-    // inform other components
     window.dispatchEvent(new Event("cart-updated"));
   };
 
@@ -74,14 +72,14 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
 
                 <div className="item-info">
                   <span className="item-name">{item.title}</span>
-                  <span className="item-price">₱{item.price.toFixed(2)}</span>
+                  <span className="item-price">₱{item.price}</span>
                 </div>
 
                 <div className="item-actions">
                   <span className="item-qty">×{item.quantity}</span>
                   <BsTrash
                     className="remove-item"
-                    onClick={() => removeItem(item.key)}
+                    onClick={() => handleRemoveItem(item.key)}
                   />
                 </div>
               </div>

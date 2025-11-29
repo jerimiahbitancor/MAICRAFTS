@@ -4,69 +4,7 @@ import { Link } from "react-router-dom"; // Import Link
 import "../css/Products.css";
 import { BsCart } from "react-icons/bs";
 import FloatingCart from "../components/FloatingCart.jsx";
-
-const productItems = [
-  {
-    id: "rainbow-rose-bouquet",
-    img: "https://i.imgur.com/9g0h1i2.jpg",
-    title: "Rainbow Rose Bouquet",
-    price: 799,
-  },
-  {
-    id: "eternal-rose",
-    img: "/flower1.svg",
-    title: "Eternal Rose Bouquet",
-    price: 159,
-  },
-  {
-    id: "crochet-bunny",
-    img: "/crochet1.svg",
-    title: "Handmade Crochet Bunny",
-    price: 159,
-  },
-  {
-    id: "luxury-roses",
-    img: "/flower2.svg",
-    title: "Luxury Preserved Roses",
-    price: 299,
-  },
-  {
-    id: "golden-dome",
-    img: "/flower1.svg",
-    title: "Golden Rose Dome",
-    price: 399,
-  },
-  {
-    id: "teddy-bear",
-    img: "/crochet1.svg",
-    title: "Amigurumi Teddy Bear",
-    price: 189,
-  },
-  {
-    id: "enchanted-galaxy",
-    img: "https://i.imgur.com/9g0h1i2.jpg",
-    title: "Enchanted Rose Galaxy",
-    price: 599,
-  },
-  {
-    id: "premium-bloom",
-    img: "https://i.imgur.com/3j4k5l6.jpg",
-    title: "Premium Eternal Bloom",
-    price: 799,
-  },
-  {
-    id: "crochet-dragon",
-    img: "https://i.imgur.com/7m8n9o0.jpg",
-    title: "Crochet Dragon",
-    price: 249,
-  },
-  {
-    id: "24k-rose",
-    img: "https://i.imgur.com/2p3q4r5.jpg",
-    title: "24K Gold Dipped Rose",
-    price: 1299,
-  },
-];
+import { products } from "../data/productsData";
 
 const Products = () => {
   const [sortBy, setSortBy] = useState("Popular");
@@ -136,7 +74,7 @@ const Products = () => {
               </div>
 
               <div className="products-grid">
-                {productItems.map((product) => (
+                {products.map((product) => (
                   <Link
                     key={product.id}
                     to={`/product/${product.id}`}

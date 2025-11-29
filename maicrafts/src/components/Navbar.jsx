@@ -37,11 +37,12 @@ const Navbar = () => {
               </div>
 
               {/* Center Logo */}
-              <div className="logo-wrapper">
-                <div className="logo-circle">
-                  <img src="../src/assets/maicrafts_logo.svg" alt="maicraftslogo" />
-                </div>
-              </div>
+<div className="logo-wrapper">
+  <div className="logo-circle">
+    <img src="/maicrafts_logo.svg" alt="maicrafts logo" />
+  </div>
+</div>
+
 
               {/* Right Links */}
               <div className="nav-links">

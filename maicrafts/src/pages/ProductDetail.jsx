@@ -3,23 +3,19 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ShoppingCart } from "lucide-react";
 import "../css/ProductDetail.css";
-
-const thumbnails = [
-  "https://i.imgur.com/9g0h1i2.jpg",
-  "https://i.imgur.com/3j4k5l6.jpg",
-  "https://i.imgur.com/7m8n9o0.jpg",
-  "https://i.imgur.com/2p3q4r5.jpg",
-];
-
-const relatedProducts = [
-  { id: 1, img: "https://i.imgur.com/9g0h1i2.jpg", title: "Rainbow Rose Bouquet", price: 799 },
-  { id: 2, img: "https://i.imgur.com/3j4k5l6.jpg", title: "Eternal Bloom", price: 599 },
-  { id: 3, img: "https://i.imgur.com/7m8n9o0.jpg", title: "Crochet Dragon", price: 249 },
-  { id: 4, img: "https://i.imgur.com/2p3q4r5.jpg", title: "24K Rose", price: 1299 },
-];
+import { products } from "../data/productsData";
 
 const ProductDetail = () => {
-  const { id } = useParams(); // For future dynamic product loading
+  const { id } = useParams();
+
+  const product = products.find((p) => p.id === id);
+
+  if (!product) {
+    return <h2 className="text-center mt-5">Product not found.</h2>;
+  }
+
+  // Use product thumbnails or fallback
+  const thumbnails = product.images || [product.img];
 
   const [selectedImage, setSelectedImage] = useState(thumbnails[0]);
   const [quantity, setQuantity] = useState(1);
@@ -27,13 +23,13 @@ const ProductDetail = () => {
   const [size, setSize] = useState("");
   const [addOns, setAddOns] = useState("");
 
-  // Mock product data (replace with real data later)
-  const product = {
-    title: "Rainbow Rose Bouquet",
-    price: 799.0,
-  };
-
   const totalPrice = product.price * quantity;
+
+  // Generate related products (3 random items, excluding this product)
+  const relatedProducts = products
+  .filter((p) => p.id !== product.id)  
+  .sort(() => Math.random() - 0.5)    
+  .slice(0, 3);                        
 
   return (
     <div className="product-detail-page">

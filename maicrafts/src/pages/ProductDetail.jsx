@@ -8,6 +8,7 @@ import { products } from "../data/productsData";
 const ProductDetail = () => {
   const { id } = useParams();
 
+  // Find product
   const product = products.find((p) => p.id === id);
 
   if (!product) {
@@ -17,19 +18,62 @@ const ProductDetail = () => {
   // Use product thumbnails or fallback
   const thumbnails = product.images || [product.img];
 
+  // States
   const [selectedImage, setSelectedImage] = useState(thumbnails[0]);
   const [quantity, setQuantity] = useState(1);
   const [flowerQty, setFlowerQty] = useState("");
   const [size, setSize] = useState("");
   const [addOns, setAddOns] = useState("");
 
-  const totalPrice = product.price * quantity;
+  const getAddOnPrice = () => {
+    if (addOns.includes("₱50")) return 50;
+    if (addOns.includes("₱250")) return 250;
+    if (addOns.includes("₱350")) return 350;
+    return 0;
+  };
+  
+  const totalPrice = (product.price + getAddOnPrice()) * quantity;
 
-  // Generate related products (3 random items, excluding this product)
+  const addToCart = () => {
+    let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  
+    const uniqueKey =
+      size || flowerQty || addOns
+        ? `${product.id}-${size}-${flowerQty}-${addOns}`
+        : `${product.id}-${Date.now()}`;
+  
+    const existingItem = cart.find((item) => item.key === uniqueKey);
+  
+    const finalPrice = product.price + getAddOnPrice();
+  
+    if (existingItem) {
+      existingItem.quantity += quantity;
+      existingItem.total = finalPrice * existingItem.quantity;
+    } else {
+      cart.push({
+        key: uniqueKey,
+        id: product.id,
+        title: product.title,
+        price: finalPrice,
+        img: selectedImage,
+        quantity,
+        flowerQty,
+        size,
+        addOns,
+        total: finalPrice * quantity,
+      });
+    }
+  
+    localStorage.setItem("cart", JSON.stringify(cart));
+    window.dispatchEvent(new Event("cart-updated"));
+    alert("Added to cart!");
+  };
+  
+  // Related products (3 random)
   const relatedProducts = products
-  .filter((p) => p.id !== product.id)  
-  .sort(() => Math.random() - 0.5)    
-  .slice(0, 3);                        
+    .filter((p) => p.id !== product.id)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 3);                      
 
   return (
     <div className="product-detail-page">
@@ -126,7 +170,7 @@ const ProductDetail = () => {
             <div className="total-section">
               <div className="total">Total: ₱{totalPrice.toFixed(2)}</div>
               <div className="button-group">
-                <button className="btn-add-cart">
+                <button className="btn-add-cart" onClick={addToCart}>
                   <ShoppingCart size={20} /> Add to Cart
                 </button>
                 <button className="btn-buy-now">Buy Now</button>

@@ -7,24 +7,15 @@ const FloatingCart = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
-  const [cartItems, setCartItems] = useState([
-    { id: 1, name: "Rainbow Rose Bouquet", price: 799, qty: 1 },
-    { id: 2, name: "Crochet Bunny", price: 159, qty: 2 },
-    { id: 3, name: "24K Gold Rose", price: 1299, qty: 1 },
-    { id: 4, name: "Bunny Crochet", price: 500, qty: 1 },
-    { id: 5, name: "Wicked Inspired Bouquet", price: 299, qty: 1 },
-  ]);
+  // DELETE THIS LINE IF IT EXISTS:
+  // const [cartItems, setCartItems] = useState([]);
 
   const toggleCart = () => setIsOpen(!isOpen);
   const openCheckout = () => {
     setIsCheckoutOpen(true);
-    setIsOpen(false); // Optional: close cart when opening checkout
+    setIsOpen(false);
   };
   const closeCheckout = () => setIsCheckoutOpen(false);
-
-  const removeItem = (id) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
-  };
 
   const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
 
@@ -38,7 +29,6 @@ const FloatingCart = () => {
         )}
       </div>
 
-      {/* Sliding Cart Panel */}
       <div className={`cart-panel ${isOpen ? "open" : ""}`}>
         <div className="cart-header">
           <h3>Your Cart</h3>
@@ -59,7 +49,7 @@ const FloatingCart = () => {
                   <span className="item-qty">×{item.qty}</span>
                   <BsTrash
                     className="remove-item"
-                    onClick={() => removeItem(item.id)}
+                    onClick={() => handleRemoveItem(item.key)}
                   />
                 </div>
               </div>
@@ -88,7 +78,7 @@ const FloatingCart = () => {
 
             <div className="modal-items">
               {cartItems.map((item) => (
-                <div className="modal-item" key={item.id}>
+                <div className="modal-item" key={item.key}>
                   <div className="modal-item-left">
                     <span className="modal-item-name">{item.name}</span>
                     <span className="modal-item-qty">×{item.qty}</span>

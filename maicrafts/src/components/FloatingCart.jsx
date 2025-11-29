@@ -16,7 +16,6 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
 
   const closeCheckout = () => setIsCheckoutOpen(false);
 
-  // ✅ Always use item.qty (never item.quantity)
   const totalPrice = cartItems.reduce(
     (acc, item) => acc + item.price * item.qty,
     0

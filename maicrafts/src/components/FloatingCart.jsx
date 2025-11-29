@@ -3,28 +3,16 @@ import React, { useState } from "react";
 import { BsCart, BsTrash, BsX } from "react-icons/bs";
 import "../components/components-css/FloatingCart.css";
 
-const FloatingCart = () => {
+const FloatingCart = ({ cartItems = [], removeItem }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-
-  const [cartItems, setCartItems] = useState([
-    { id: 1, name: "Rainbow Rose Bouquet", price: 799, qty: 1 },
-    { id: 2, name: "Crochet Bunny", price: 159, qty: 2 },
-    { id: 3, name: "24K Gold Rose", price: 1299, qty: 1 },
-    { id: 4, name: "Bunny Crochet", price: 500, qty: 1 },
-    { id: 5, name: "Wicked Inspired Bouquet", price: 299, qty: 1 },
-  ]);
 
   const toggleCart = () => setIsOpen(!isOpen);
   const openCheckout = () => {
     setIsCheckoutOpen(true);
-    setIsOpen(false); // Optional: close cart when opening checkout
+    setIsOpen(false);
   };
   const closeCheckout = () => setIsCheckoutOpen(false);
-
-  const removeItem = (id) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
-  };
 
   const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
 

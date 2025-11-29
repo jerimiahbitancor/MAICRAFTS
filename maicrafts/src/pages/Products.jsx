@@ -4,121 +4,7 @@ import { Link } from "react-router-dom"; // Import Link
 import "../css/Products.css";
 import { BsCart } from "react-icons/bs";
 import FloatingCart from "../components/FloatingCart.jsx";
-//
-const productItems = [
-  {
-    id: "crochet-hello-kitty",
-    img: new URL("../assets/doll.png", import.meta.url).href,
-    title: "Handmade Crochet",
-    price: 100,
-    category: "Crochet Gifts",
-    occasion: ["Birthday", "Anniversary"],
-  },
-  {
-    id: "crochet-bunny",
-    img: new URL("../assets/doll2.png", import.meta.url).href,
-    title: "Handmade Crochet",
-    price: 120,
-    category: "Crochet Gifts",
-    occasion: ["Birthday"],
-  },
-  {
-    id: "crochet-dog",
-    img: new URL("../assets/doll3.png", import.meta.url).href,
-    title: "Handmade Crochet",
-    price: 130,
-    category: "Crochet Gifts",
-    occasion: ["Birthday"],
-  },
-  {
-    id: "crochet-corpse-bride",
-    img: new URL("../assets/doll4.png", import.meta.url).href,
-    title: "Handmade Crochet",
-    price: 150,
-    category: "Crochet Gifts",
-    occasion: ["Anniversary"],
-  },
-  {
-    id: "crochet-dog-version2",
-    img: new URL("../assets/doll5.png", import.meta.url).href,
-    title: "Handmade Crochet",
-     price: 200,
-    category: "Crochet Gifts",
-    occasion: ["Birthday"],
-  },
-  {
-    id: "crochet-couple-dolls",
-    img: new URL("../assets/doll6.png", import.meta.url).href,
-    title: "Handmade Crochet",
-     price: 300,
-    category: "Crochet Gifts",
-    occasion: ["Valentine's Day", "Anniversary"],
-  },
-  {
-    id: "giant-fuzzy-rose-1",
-    img: new URL("../assets/flower.png", import.meta.url).href,
-    title: "Handmade Crochet",
-     price: 250,
-    category: "Preserved Flowers",
-    occasion: ["Valentine's Day", "Mother's Day"],
-  },
-  {
-    id: "giant-fuzzy-rose-2",
-    img: new URL("../assets/flower2.png", import.meta.url).href,
-    title: "Handmade Crochet",
-     price: 400,
-    category: "Preserved Flowers",
-    occasion: ["Valentine's Day"],
-  },
-  {
-    id: "giant-fuzzy-rose-3",
-    img: new URL("../assets/flower3.png", import.meta.url).href,
-    title: "Handmade Crochet",
-    price: 200,
-    category: "Preserved Flowers",
-    occasion: ["Mother's Day"],
-  },
-  {
-    id: "giant-fuzzy-rose-4",
-    img: new URL("../assets/flower4.png", import.meta.url).href,
-    title: "Handmade Crochet",
-     price: 300,
-    category: "Preserved Flowers",
-    occasion: ["Birthday"],
-  },
-  {
-    id: "giant-fuzzy-rose-5",
-    img: new URL("../assets/flower5.png", import.meta.url).href,
-    title: "Handmade Crochet",
-     price: 100,
-    category: "Preserved Flowers",
-    occasion: ["Anniversary"],
-  },
-  {
-    id: "giant-fuzzy-rose-6",
-    img: new URL("../assets/flower6.png", import.meta.url).href,
-    title: "Handmade Crochet",
-    price: 140,
-    category: "Preserved Flowers",
-    occasion: ["Graduation"],
-  },
-  {
-    id: "giant-fuzzy-rose-7",
-    img: new URL("../assets/flower7.png", import.meta.url).href,
-    title: "Handmade Crochet",
-     price: 160,
-    category: "Preserved Flowers",
-    occasion: ["Christmas"],
-  },
-  {
-    id: "giant-fuzzy-rose-8",
-    img: new URL("../assets/flower8.png", import.meta.url).href,
-    title: "Handmade Crochet",
-     price: 290,
-    category: "Preserved Flowers",
-    occasion: ["Valentine's Day"],
-  },
-];
+import { products } from "../data/productsData";
 
 const Products = () => {
   const [sortBy, setSortBy] = useState("Popular");
@@ -131,22 +17,27 @@ const Products = () => {
   const categories = ["Preserved Flowers", "Crochet Gifts", "Luxury Gifts", "Accessories"];
 
   const filteredAndSortedProducts = useMemo(() => {
-    let filtered = productItems.filter((product) => {
-      const occasionMatch = selectedOccasions.length === 0 || selectedOccasions.some((occ) => product.occasion.includes(occ));
-      const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(product.category);
+    let filtered = products.filter((product) => {
+      const occasionMatch =
+        selectedOccasions.length === 0 ||
+        selectedOccasions.some((occ) => product.occasion.includes(occ));
+  
+      const categoryMatch =
+        selectedCategories.length === 0 ||
+        selectedCategories.includes(product.category);
+  
       return occasionMatch && categoryMatch;
     });
-
+  
     if (sortBy === "Price") {
       filtered = filtered.sort((a, b) => a.price - b.price);
     } else if (sortBy === "Latest") {
-      // Assuming latest means by id or something; for demo, sort by id descending
       filtered = filtered.sort((a, b) => b.id.localeCompare(a.id));
     }
-    // Popular is default, no sorting
-
+  
     return filtered;
   }, [selectedOccasions, selectedCategories, sortBy]);
+  
 
   const handleOccasionChange = (occasion) => {
     setSelectedOccasions((prev) =>

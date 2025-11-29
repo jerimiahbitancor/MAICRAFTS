@@ -1,26 +1,28 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Dashboard from './pages/Dashboard'
-import Products from './pages/Products'
-import Sidebar from './components/Sidebar'
-import Navbar from './components/Navbar'
+import React from "react";
+import Sidebar from "./components/Sidebar";
+import Navbar from "./components/Navbar";
+import Dashboard from "./pages/Dashboard";
+import Users from "./pages/Users";
+import Products from "./pages/Products";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./index.css";
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="d-flex">
+    <Router>
+      <div className="app">
         <Sidebar />
-        <div className="flex-grow-1">
+        <div className="main">
           <Navbar />
-          <div className="p-4" style={{ marginLeft: '250px' }}>
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/products" element={<Products />} />
-            </Routes>
-          </div>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/products" element={<Products />} />
+          </Routes>
         </div>
       </div>
-    </BrowserRouter>
-  )
+    </Router>
+  );
 }
 
-export default App
+export default App;

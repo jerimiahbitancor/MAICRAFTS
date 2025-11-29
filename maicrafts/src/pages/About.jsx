@@ -1,3 +1,4 @@
+// maicrafts/src/pages/About.jsx
 import "../css/About.css";
 
 const About = () => {

@@ -3,12 +3,9 @@ import React, { useState } from "react";
 import { BsCart, BsTrash, BsX } from "react-icons/bs";
 import "../components/components-css/FloatingCart.css";
 
-const FloatingCart = () => {
+const FloatingCart = ({ cartItems = [], removeItem }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-
-  // DELETE THIS LINE IF IT EXISTS:
-  // const [cartItems, setCartItems] = useState([]);
 
   const toggleCart = () => setIsOpen(!isOpen);
   const openCheckout = () => {
@@ -17,7 +14,10 @@ const FloatingCart = () => {
   };
   const closeCheckout = () => setIsCheckoutOpen(false);
 
-  const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
+  const totalPrice = cartItems.reduce(
+    (acc, item) => acc + item.price * item.qty,
+    0
+  );
 
   return (
     <>
@@ -42,14 +42,14 @@ const FloatingCart = () => {
             cartItems.map((item) => (
               <div className="cart-item" key={item.id}>
                 <div className="item-info">
-                  <span className="item-name">{item.name}</span>
+                  <span className="item-name">{item.title}</span>
                   <span className="item-price">₱{item.price.toFixed(2)}</span>
                 </div>
                 <div className="item-actions">
                   <span className="item-qty">×{item.qty}</span>
                   <BsTrash
                     className="remove-item"
-                    onClick={() => handleRemoveItem(item.key)}
+                    onClick={() => removeItem(item.key)}
                   />
                 </div>
               </div>
@@ -78,9 +78,9 @@ const FloatingCart = () => {
 
             <div className="modal-items">
               {cartItems.map((item) => (
-                <div className="modal-item" key={item.key}>
+                <div className="modal-item" key={item.id}>
                   <div className="modal-item-left">
-                    <span className="modal-item-name">{item.name}</span>
+                    <span className="modal-item-name">{item.title}</span>
                     <span className="modal-item-qty">×{item.qty}</span>
                   </div>
                   <span className="modal-item-price">
@@ -105,7 +105,7 @@ const FloatingCart = () => {
             </div>
 
             <p className="modal-note">
-              You will be redirected to payment gateway after confirmation.
+              You will be redirected to a payment gateway after confirmation.
             </p>
           </div>
         </div>

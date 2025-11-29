@@ -47,8 +47,8 @@ const ProductDetail = () => {
     const finalPrice = product.price + getAddOnPrice();
   
     if (existingItem) {
-      existingItem.quantity += quantity;
-      existingItem.total = finalPrice * existingItem.quantity;
+      existingItem.qty += quantity;
+      existingItem.total = finalPrice * existingItem.qty;
     } else {
       cart.push({
         key: uniqueKey,
@@ -56,12 +56,12 @@ const ProductDetail = () => {
         title: product.title,
         price: finalPrice,
         img: selectedImage,
-        quantity,
+        qty: quantity,    // ✔ FIXED
         flowerQty,
         size,
         addOns,
         total: finalPrice * quantity,
-      });
+      });      
     }
   
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -187,12 +187,9 @@ const ProductDetail = () => {
         {/* Description */}
         <div className="description-section">
           <h3>Product Description</h3>
-          <p>
-            A stunning preserved rainbow rose bouquet that lasts over a year with no water needed. 
-            Perfect gift for anniversaries, birthdays, or just to say "I love you". 
-            Handcrafted with love.
-          </p>
+          <p>{product.description}</p>
         </div>
+
 
         {/* Related Products */}
         <div className="related-section">

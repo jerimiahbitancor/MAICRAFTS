@@ -155,11 +155,15 @@ return (
 
             <div className="products-grid">
               {filteredAndSortedProducts.map((product) => (
-                <Link
-                  key={product.id}
-                  to={`/product/${product.id}`}
-                  className="product-card-link"
-                >
+                    <Link
+                    key={product.id}
+                    to={
+                      product.category === "Crochet Gifts"
+                        ? `/crochet/${product.id}`     // ⬅ go to ProductDetail2.jsx
+                        : `/product/${product.id}`     // ⬅ default ProductDetail.jsx
+                    }
+                    className="product-card-link"
+                  >              
                   <div className="product-card">
                     {/* IMAGE */}
                     <div className="product-img-wrapper">

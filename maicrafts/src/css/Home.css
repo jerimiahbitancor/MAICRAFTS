@@ -198,6 +198,25 @@
     transition: all 0.4s ease;
     min-height: 300px;}
 
+.product-details {
+  padding: 1rem;
+  text-align: center;
+  color: var(--brown-dark);
+}
+
+.product-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: var(--brown-dark);
+}
+
+.product-price {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0;
+}
 
   .product-card:hover {
     transform: translateY(-10px);

@@ -3,23 +3,32 @@ import { useState } from "react";
 import { X, Plus, Facebook, Instagram, Mail } from "lucide-react";
 import "../css/CustomizeFormModal.css";
 import emailjs from '@emailjs/browser';
+// Remove Cloudinary import if not using signed uploads (unsigned doesn't need it)
+// import { v2 as cloudinary } from 'cloudinary';
 
-const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for control
+// Cloudinary config (optional for unsigned uploads; remove if not needed)
+// cloudinary.config({
+//   cloud_name: 'duilngnnp',
+//   api_key: '483396165557549',
+//   // Remove api_secret for unsigned uploads (security risk to expose it)
+// });
+
+const CustomizeFormModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
     productType: "",
     customDescription: "",
     sizeScale: "",
     additionalRequests: "",
-    customerEmail: "",  // Updated: Replaced contactNumber with customerEmail
+    customerEmail: "",
   });
 
   const [uploadedImage, setUploadedImage] = useState(null);
-  const [errors, setErrors] = useState({});  // New: State for validation errors
+  const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
+  const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
@@ -28,9 +37,25 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
   const handleImageUpload = (e) => {
     const file = e.target.files?.[0];
     if (file) {
+      // Preview the image locally
       const reader = new FileReader();
       reader.onloadend = () => setUploadedImage(reader.result);
       reader.readAsDataURL(file);
+
+      // Upload to Cloudinary and get URL
+      const formDataUpload = new FormData();  // Renamed to avoid conflict
+      formDataUpload.append('file', file);
+      formDataUpload.append('upload_preset', 'maicrafts');  // Your preset name
+
+      fetch(`https://api.cloudinary.com/v1_1/duilngnnp/image/upload`, {  // Replaced YOUR_CLOUD_NAME
+        method: 'POST',
+        body: formDataUpload,
+      })
+      .then(response => response.json())
+      .then(data => {
+        setUploadedImageUrl(data.secure_url);  // Store the URL
+      })
+      .catch(error => console.error('Upload failed:', error));
     }
   };
 
@@ -42,7 +67,7 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
     if (!formData.customDescription.trim()) {
       newErrors.customDescription = "Please describe your custom order.";
     }
-    if (!formData.customerEmail.trim()) {  // Updated: Validate email instead of phone
+    if (!formData.customerEmail.trim()) {
       newErrors.customerEmail = "Please enter your email address.";
     } else if (!/\S+@\S+\.\S+/.test(formData.customerEmail.trim())) {
       newErrors.customerEmail = "Please enter a valid email address.";
@@ -57,44 +82,46 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {  // Accept props for contr
       customDescription: "",
       sizeScale: "",
       additionalRequests: "",
-      customerEmail: "",  // Updated: Reset customerEmail
+      customerEmail: "",
     });
     setUploadedImage(null);
+    setUploadedImageUrl(null);
     setErrors({});
   };
 
-const handleSubmit = () => {
-  if (validateForm()) {
-    // Prepare data for EmailJS (map formData to template variables)
-    const templateParams = {
-  productType: formData.productType,
-  customDescription: formData.customDescription,
-  sizeScale: formData.sizeScale || "Not specified",
-  additionalRequests: formData.additionalRequests || "None",
-  customerEmail: formData.customerEmail,
-  // Remove uploadedImage
-};
-    // Send email using EmailJS
-    emailjs.send(
-      'service_qxu1bhv',  // Your EmailJS service ID
-      'template_qy8mwbr',  // Your EmailJS template ID
-      templateParams,
-      's9m7Qu_NeupEAwhmQ'  // Your EmailJS public key
-    )
-    .then((response) => {
-      console.log('Email sent successfully:', response);
-      alert("Custom order submitted successfully! A confirmation email has been sent to your email.");
-      resetForm();
-      onClose();
-    })
-    .catch((error) => {
-      console.error('Email send failed:', error);
-      alert("Submission successful, but email failed to send. Please contact us directly.");
-      resetForm();
-      onClose();
-    });
-  }
-};
+  const handleSubmit = () => {
+    if (validateForm()) {
+      const templateParams = {
+        productType: formData.productType,
+        customDescription: formData.customDescription,
+        sizeScale: formData.sizeScale || "Not specified",
+        additionalRequests: formData.additionalRequests || "None",
+        customerEmail: formData.customerEmail,
+        uploadedImage: uploadedImageUrl ? `<img src="${uploadedImageUrl}" alt="Uploaded Inspiration Image" style="max-width: 300px; height: auto;" />` : "No image uploaded.",
+      };
+
+      // Send email using EmailJS
+      emailjs.send(
+        'service_qxu1bhv',
+        'template_qy8mwbr',
+        templateParams,
+        's9m7Qu_NeupEAwhmQ'
+      )
+      .then((response) => {
+        console.log('Email sent successfully:', response);
+        alert("Custom order submitted successfully! A confirmation email has been sent to your email.");
+        resetForm();
+        onClose();
+      })
+      .catch((error) => {
+        console.error('Email send failed:', error);
+        alert("Submission successful, but email failed to send. Please contact us directly.");
+        resetForm();
+        onClose();
+      });
+    }
+  };
+
   return (
     <>
       {isOpen && (
@@ -232,7 +259,7 @@ const handleSubmit = () => {
                   </label>
 
                   <div className="cfm-contactInputs">
-                    <input  // Updated: Changed to email input
+                    <input
                       type="email"
                       name="customerEmail"
                       placeholder="Email Address (e.g., example@gmail.com)"

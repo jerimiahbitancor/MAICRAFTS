@@ -23,20 +23,38 @@ const FloatingCart = ({ cartItems = [], removeItem }) => {
     setIsFormOpen(true);
   };
 
-  const handleFormSubmit = (formData) => {
-    // Handle the form submission here
-    console.log("Order Details:", {
-      customer: formData,
-      items: cartItems,
-      total: totalPrice
-    });
-    
-    // Close the form modal
-    setIsFormOpen(false);
-    
-    // You can add your payment gateway redirect or API call here
-    alert(`Thank you ${formData.firstName}! Your order has been received.`);
+  const handleFormSubmit = async (formData) => {
+    try {
+      const response = await fetch("http://localhost:5000/send-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          cartItems: cartItems.map(item => ({
+            name: item.title,
+            quantity: item.qty,
+            price: item.price,
+          })),
+          totalPrice: totalPrice
+        }),
+      });
+  
+      const result = await response.json();
+  
+      if (result.success) {
+        alert(`Thank you ${formData.firstName}! Your order has been received.`);
+        setIsFormOpen(false);
+      } else {
+        alert("Failed to send email. Please try again.");
+      }
+    } catch (error) {
+      console.error("Email sending error:", error);
+      alert("Error sending order email.");
+    }
   };
+  
 
   const totalPrice = cartItems.reduce(
     (acc, item) => acc + item.price * item.qty,

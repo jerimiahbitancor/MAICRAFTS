@@ -4,18 +4,20 @@ import { Link, useParams } from "react-router-dom";
 import { ShoppingCart } from "lucide-react";
 import "../css/ProductDetail.css";
 import { products } from "../data/productsData";
+import CheckoutFormModal from "../components/CheckoutFormModal";
 
 const ProductDetail = () => {
   const { id } = useParams();
 
   // Find product
   const product = products.find((p) => p.id === id);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   if (!product) {
     return <h2 className="text-center mt-5">Product not found.</h2>;
   }
 
-  // Use product thumbnails or fallback
+  // Thumbnails
   const thumbnails = product.images || [product.img];
 
   // States
@@ -31,26 +33,19 @@ const ProductDetail = () => {
     if (addOns.includes("₱350")) return 350;
     return 0;
   };
-  
+
   const totalPrice = (product.price + getAddOnPrice()) * quantity;
 
   const addToCart = () => {
     let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-
-    // Create a consistent unique key based on selected options
     const uniqueKey = `${product.id}-${size || "none"}-${flowerQty || "none"}-${addOns || "none"}`;
-
     const finalPrice = product.price + getAddOnPrice();
+    const existingIndex = cart.findIndex((item) => item.key === uniqueKey);
 
-    // Look for existing item with SAME product + SAME variations
-    const existingItemIndex = cart.findIndex((item) => item.key === uniqueKey);
-
-    if (existingItemIndex !== -1) {
-      // Item exists → just increase quantity
-      cart[existingItemIndex].qty += quantity;
-      cart[existingItemIndex].total = finalPrice * cart[existingItemIndex].qty;
+    if (existingIndex !== -1) {
+      cart[existingIndex].qty += quantity;
+      cart[existingIndex].total = finalPrice * cart[existingIndex].qty;
     } else {
-      // New variation → add as new item
       cart.push({
         key: uniqueKey,
         id: product.id,
@@ -69,12 +64,12 @@ const ProductDetail = () => {
     window.dispatchEvent(new Event("cart-updated"));
     alert("Added to cart!");
   };
-  
-  // Related products (3 random)
+
+  // Related products
   const relatedProducts = products
     .filter((p) => p.id !== product.id)
     .sort(() => Math.random() - 0.5)
-    .slice(0, 3);                      
+    .slice(0, 3);
 
   return (
     <div className="product-detail-page">
@@ -109,25 +104,31 @@ const ProductDetail = () => {
             <h1 className="product-title">{product.title}</h1>
             <h2 className="product-price">₱{totalPrice.toFixed(2)}</h2>
 
-            {/* Color Variations */}
+            {/* Variations */}
             <div className="variation-section">
               <label className="label">Variations</label>
               <div className="color-grid">
-                {["Pink Rose", "Red", "Yellow", "Brown", "Blue", "Green", "Violet", "Lover"].map((color) => (
-                  <label key={color} className="color-option">
-                    <input type="radio" name="color" />
-                    <span className={`color-swatch ${color.toLowerCase().replace(" ", "-")}`} />
-                    <span className="color-name">{color}</span>
-                  </label>
-                ))}
+                {["Pink Rose", "Red", "Yellow", "Brown", "Blue", "Green", "Violet", "Lover"].map(
+                  (color) => (
+                    <label key={color} className="color-option">
+                      <input type="radio" name="color" />
+                      <span className={`color-swatch ${color.toLowerCase().replace(" ", "-")}`} />
+                      <span className="color-name">{color}</span>
+                    </label>
+                  )
+                )}
               </div>
             </div>
 
-            {/* Flower Qty & Size */}
+            {/* Flower Qty + Size */}
             <div className="row">
               <div className="half">
                 <label className="label">Quantity of Flower</label>
-                <select value={flowerQty} onChange={(e) => setFlowerQty(e.target.value)} className="select">
+                <select
+                  value={flowerQty}
+                  onChange={(e) => setFlowerQty(e.target.value)}
+                  className="select"
+                >
                   <option value="">Choose...</option>
                   <option>5 Flowers</option>
                   <option>12 Flowers</option>
@@ -135,6 +136,7 @@ const ProductDetail = () => {
                   <option>50 Flowers</option>
                 </select>
               </div>
+
               <div className="half">
                 <label className="label">Size</label>
                 <select value={size} onChange={(e) => setSize(e.target.value)} className="select">
@@ -167,18 +169,43 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Total & Buttons */}
+            {/* Total + Buttons */}
             <div className="total-section">
               <div className="total">Total: ₱{totalPrice.toFixed(2)}</div>
+
               <div className="button-group">
                 <button className="btn-add-cart" onClick={addToCart}>
                   <ShoppingCart size={20} /> Add to Cart
                 </button>
-                <button className="btn-buy-now">Buy Now</button>
+
+                {/* BUY NOW */}
+                <button
+                  className="btn-buy-now"
+                  onClick={() => {
+                    const checkoutItem = [
+                      {
+                        id: product.id,
+                        title: product.title,
+                        price: product.price + getAddOnPrice(),
+                        img: selectedImage,
+                        qty: quantity,
+                        flowerQty,
+                        size,
+                        addOns,
+                        total: (product.price + getAddOnPrice()) * quantity,
+                      },
+                    ];
+
+                    localStorage.setItem("checkout_item", JSON.stringify(checkoutItem));
+                    setIsCheckoutOpen(true);
+                  }}
+                >
+                  Buy Now
+                </button>
               </div>
             </div>
 
-            {/* Policy Links */}
+            {/* Policy */}
             <div className="policy-links">
               <a href="#">Payment Policy</a> • <a href="#">Delivery Policy</a>
             </div>
@@ -191,7 +218,7 @@ const ProductDetail = () => {
           <p>{product.description}</p>
         </div>
 
-        {/* Related Products */}
+        {/* Related */}
         <div className="related-section">
           <h3>You may also like</h3>
           <div className="related-grid">
@@ -212,6 +239,14 @@ const ProductDetail = () => {
             ))}
           </div>
         </div>
+
+        {/* Checkout Modal */}
+        <CheckoutFormModal
+          isOpen={isCheckoutOpen}
+          onClose={() => setIsCheckoutOpen(false)}
+          cartItems={JSON.parse(localStorage.getItem("checkout_item") || "[]")}
+          totalPrice={(product.price + getAddOnPrice()) * quantity}
+        />
       </div>
     </div>
   );

@@ -81,6 +81,15 @@ return (
   <>
     {/* HERO SECTION */}
     <section className="hero-wrapper d-flex align-items-center justify-content-center">
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    className="bg-video"
+    src="/products.mp4"
+  />
+
       <div className="hero-bg-circle"></div>
       <div className="container hero-inner text-center">
         <div className="row justify-content-end align-items-center">

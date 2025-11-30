@@ -2,22 +2,7 @@
 import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/Home.css";
-import FloatingCart from "../components/FloatingCart.jsx";
-
-
-const products = [
-  { img: "/flower1.svg", title: "Eternal Rose Bouquet" },
-  { img: "/crochet1.svg", title: "Handmade Crochet Bunny" },
-  { img: "/flower2.svg", title: "Luxury Preserved Roses" },
-  { img: "/flower1.svg", title: "Eternal Rose Bouquet 2" },
-  { img: "/crochet1.svg", title: "Handmade Crochet Bunny 2" },
-  { img: "/flower2.svg", title: "Luxury Preserved Roses 2" },
-  { img: "https://i.imgur.com/9g0h1i2.jpg", title: "Luxury Preserved Roses 3" },
-  { img: "https://i.imgur.com/3j4k5l6.jpg", title: "Eternal Rose Bouquet 3" },
-  { img: "https://i.imgur.com/7m8n9o0.jpg", title: "Handmade Crochet Bunny 3" },
-  { img: "https://i.imgur.com/2p3q4r5.jpg", title: "Luxury Preserved Roses 4" },
-];
-
+import { products } from "../data/productsData.js";
 
 const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -25,14 +10,15 @@ const Home = () => {
 
   const prevSlide = () => {
     setCurrentIndex((prev) =>
-      prev === 0 ? products.length - visibleCount : prev - visibleCount
+      prev === 0 ? Math.max(0, products.length - visibleCount) : Math.max(0, prev - visibleCount)
     );
   };
 
   const nextSlide = () => {
-    setCurrentIndex((prev) =>
-      prev + visibleCount >= products.length ? 0 : prev + visibleCount
-    );
+    setCurrentIndex((prev) => {
+      const nextIndex = prev + visibleCount;
+      return nextIndex >= products.length ? 0 : nextIndex;
+    });
   };
 
   const goToSlide = (index) => {
@@ -42,18 +28,21 @@ const Home = () => {
   // Calculate number of dots/pages
   const pages = Math.ceil(products.length / visibleCount);
 
+  // Get visible products
+  const visibleProducts = products.slice(currentIndex, currentIndex + visibleCount);
+
   return (
     <>
       {/* HERO SECTION */}
- <section className="hero-section">
-  <video
-    autoPlay
-    muted
-    loop
-    playsInline
-    className="bg-video"
-    src="/counter1.mp4"
-  />
+      <section className="hero-section">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="bg-video"
+          src="/counter1.mp4"
+        />
 
         <div className="circular-gradient-bg"></div>
         <div className="container hero-content py-5">
@@ -80,47 +69,49 @@ const Home = () => {
         </div>
       </section>
 
-      {/* FEATURED PRODUhCTS */}
+      {/* FEATURED PRODUCTS */}
       <section id="products" className="featured-prod py-5 py-md-7">
         <div className="container">
           <div className="section-title mb-5 mb-md-6">
-            <h2 className="prod-title display-5 text-center m-0">
+            <h2 className="prod-title display-1 text-center m-0">
               Featured Products
             </h2>
           </div>
 
           <div className="carousel-container position-relative">
-            <div className="products-grid d-flex gap-3 justify-content-center">
-              {products
-                .slice(currentIndex, currentIndex + visibleCount)
-                .map((product, index) => (
-                  <div key={index} className="product-item flex-fill">
-                    <div className="product-card">
-                      <div className="img-wrapper">
-                        <img
-                          src={product.img}
-                          alt={product.title}
-                          className="transition-scale"
-                          loading="lazy"
-                        />
-                        <div className="img-overlay"></div>
-                        
-                      </div>
-                      <div className="product-info">
-                          
-                        </div>
-                      <div className="product-details">
-                        <h5 className="product-title">{product.title}</h5>
-                        <p className="product-price">₱{product.price}</p>
-                      </div>
+            <div className="products-grid">
+              {visibleProducts.map((product) => (
+                <div key={product.id} className="product-item">
+                  <div className="product-card">
+                    <div className="img-wrapper">
+                      <img
+                        src={product.img}
+                        alt={product.title}
+                        className="transition-scale"
+                        loading="lazy"
+                      />
+                      <div className="img-overlay"></div>
+                    </div>
+                    <div className="product-details">
+                      <h5 className="product-title">{product.title}</h5>
+                      <p className="product-price">₱{product.price}</p>
                     </div>
                   </div>
-                ))}
+                </div>
+              ))}
             </div>
 
             {/* Prev/Next Buttons */}
-            <button className="carousel-btn prev" onClick={prevSlide}></button>
-            <button className="carousel-btn next" onClick={nextSlide}></button>
+            <button 
+              className="carousel-btn prev" 
+              onClick={prevSlide}
+              aria-label="Previous products"
+            ></button>
+            <button 
+              className="carousel-btn next" 
+              onClick={nextSlide}
+              aria-label="Next products"
+            ></button>
 
             {/* Dots Indicator */}
             <div className="text-center mt-4">
@@ -128,9 +119,11 @@ const Home = () => {
                 <span
                   key={index}
                   className={`dot ${
-                    currentIndex / visibleCount === index ? "active" : ""
+                    Math.floor(currentIndex / visibleCount) === index ? "active" : ""
                   }`}
                   onClick={() => goToSlide(index)}
+                  role="button"
+                  aria-label={`Go to page ${index + 1}`}
                 ></span>
               ))}
             </div>

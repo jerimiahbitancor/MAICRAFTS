@@ -1,51 +1,91 @@
+// src/pages/ProductDetail2.jsx
 import { useState } from "react";
+import { useParams, Link } from "react-router-dom";
 import { ShoppingCart } from "lucide-react";
 import "../css/ProductDetail2.css";
+import { products } from "../data/productsData";
 
-const relatedProducts = [
-  { img: "https://i.imgur.com/9g0h1i2.jpg", title: "Name", rating: 5, price: 159 },
-  { img: "https://i.imgur.com/9g0h1i2.jpg", title: "Name", rating: 5, price: 159 },
-  { img: "https://i.imgur.com/9g0h1i2.jpg", title: "Name", rating: 5, price: 159 },
-  { img: "https://i.imgur.com/9g0h1i2.jpg", title: "Name", rating: 5, price: 159 },
-];
+const ProductDetail2 = () => {
+  const { id } = useParams();
 
-const ProductDetail = () => {
+  // Filter crochet products
+  const crochetProducts = products.filter((p) =>
+    p.category.toLowerCase().includes("crochet")
+  );
+
+  // Selected product
+  const product = crochetProducts.find((p) => p.id === id);
+
+  // Hooks MUST ALWAYS be here (before condition)
+  const thumbnails = product?.images || [product?.img];
+  const [selectedImage, setSelectedImage] = useState(thumbnails[0]);
   const [quantity, setQuantity] = useState(1);
-  const basePrice = 0.0;
-  const totalPrice = basePrice * quantity;
+
+  // If product does NOT exist → return UI
+  if (!product) {
+    return <h2 className="text-center mt-5">Crochet product not found.</h2>;
+  }
+
+  const totalPrice = product.price * quantity;
+
+  // Add to cart
+  const addToCart = () => {
+    let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+    const existing = cart.find(
+      (item) => item.id === product.id && item.img === selectedImage
+    );
+
+    if (existing) {
+      existing.qty += quantity;
+      existing.total = existing.price * existing.qty;
+    } else {
+      cart.push({
+        key: `${product.id}-${Date.now()}`,
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        img: selectedImage,
+        qty: quantity,
+        total: product.price * quantity,
+      });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    window.dispatchEvent(new Event("cart-updated"));
+    alert("Added to cart!");
+  };
+
+  // Related products
+  const relatedProducts = crochetProducts
+    .filter((p) => p.id !== product.id)
+    .slice(0, 4);
 
   return (
     <div className="pd-page">
       <div className="pd-container">
-        
-        {/* Breadcrumb */}
-        <div className="pd-breadcrumb">Products &gt; Product Name</div>
+        <div className="pd-breadcrumb">
+          Crochet &gt; {product.title}
+        </div>
 
-        {/* Main Content */}
         <div className="pd-main">
-          
-          {/* Left */}
+          {/* LEFT */}
           <div className="pd-left">
             <div className="pd-image-wrapper">
-              <img
-                src="https://i.imgur.com/9g0h1i2.jpg"
-                alt="Product"
-                className="pd-main-image"
-              />
+              <img src={selectedImage} className="pd-main-image" />
             </div>
+
+           
           </div>
 
-          {/* Right */}
+          {/* RIGHT */}
           <div className="pd-right">
-            <h1 className="pd-title">Product Name</h1>
+            <h1 className="pd-title">{product.title}</h1>
             <h2 className="pd-price">₱ {totalPrice.toFixed(2)}</h2>
 
-            {/* Description */}
             <div className="pd-description-box">
               <h3 className="pd-description-title">Product Description</h3>
-              <p className="pd-description-text">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit...
-              </p>
+              <p className="pd-description-text">{product.description}</p>
             </div>
 
             {/* Quantity */}
@@ -71,59 +111,38 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Total */}
-            <div className="pd-total">
-              <span className="pd-total-label">
-                Total: ₱ {totalPrice.toFixed(2)}
-              </span>
-            </div>
-
             {/* Buttons */}
             <div className="pd-buttons">
-              <button className="pd-add-cart">Add to Cart</button>
-              <button className="pd-buy">Buy Now</button>
-            </div>
+              <button className="pd-add-cart" onClick={addToCart}>
+                <ShoppingCart size={20} /> Add to Cart
+              </button>
 
-            {/* Policy */}
-            <div className="pd-policy">
-              <a href="#" className="pd-policy-link">Payment Policy</a>
-              <span className="pd-dot">•</span>
-              <a href="#" className="pd-policy-link">Delivery Policy</a>
+              <button className="pd-buy">Buy Now</button>
             </div>
           </div>
         </div>
 
-        {/* Related Products */}
+        {/* Related */}
         <div className="pd-related-section">
           <h3 className="pd-related-title">You may also like</h3>
 
           <div className="pd-related-grid">
-            {relatedProducts.map((product, idx) => (
-              <div key={idx} className="pd-related-card">
-                
-                <img src={product.img} className="pd-related-img" />
+            {relatedProducts.map((item) => (
+              <Link to={`/crochet/${item.id}`} key={item.id} className="pd-related-card">
+                <img src={item.img} className="pd-related-img" />
 
                 <div className="pd-related-info">
-                  <p className="pd-related-name">{product.title}</p>
-
-                  <div className="pd-stars">
-                    {[...Array(5)].map((_, i) => (
-                      <span key={i} className="pd-star">★</span>
-                    ))}
-                  </div>
+                  <p className="pd-related-name">{item.title}</p>
+                  <div className="pd-stars">★★★★★</div>
 
                   <div className="pd-related-footer">
-                    <span className="pd-related-price">
-                      ₱ {product.price.toFixed(2)}
-                    </span>
-
+                    <span className="pd-related-price">₱ {item.price}</span>
                     <button className="pd-related-cart-btn">
                       <ShoppingCart size={18} />
                     </button>
                   </div>
-
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -133,4 +152,4 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;
+export default ProductDetail2;

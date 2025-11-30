@@ -58,7 +58,6 @@ const Contact = () => {
       </div>
 
     </section>
-                      <FloatingCart />
 
     </div>
   );

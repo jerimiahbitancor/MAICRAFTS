@@ -137,7 +137,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <FloatingCart />
     </>
   );
 };

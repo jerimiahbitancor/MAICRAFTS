@@ -1,13 +1,27 @@
 // src/components/FloatingCart.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BsCart, BsTrash, BsX, BsPlus, BsDash } from "react-icons/bs";
 import CheckoutFormModal from "./CheckoutFormModal";
 import "../components/components-css/FloatingCart.css";
 
-const FloatingCart = ({ cartItems = [], removeItem, updateQuantity }) => {
+const FloatingCart = () => {
+  const [cartItems, setCartItems] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
+
+  // Load cart from localStorage on mount + listen for updates
+  useEffect(() => {
+    const loadCart = () => {
+      const saved = JSON.parse(localStorage.getItem("cart") || "[]");
+      setCartItems(saved);
+    };
+
+    loadCart();
+    window.addEventListener("cart-updated", loadCart);
+
+    return () => window.removeEventListener("cart-updated", loadCart);
+  }, []);
 
   const toggleCart = () => setIsOpen(!isOpen);
 
@@ -27,13 +41,42 @@ const FloatingCart = ({ cartItems = [], removeItem, updateQuantity }) => {
     setIsFormOpen(true);
   };
 
+  // REAL updateQuantity – updates localStorage + state
+  const updateQuantity = (itemKey, newQty) => {
+    if (newQty < 1) return;
+
+    const updatedCart = cartItems.map(item =>
+      item.key === itemKey ? { ...item, qty: newQty } : item
+    );
+
+    setCartItems(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    window.dispatchEvent(new Event("cart-updated"));
+  };
+
+  // REAL removeItem – removes from localStorage + state
+  const removeItem = (itemKey) => {
+    const updatedCart = cartItems.filter(item => item.key !== itemKey);
+    setCartItems(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    window.dispatchEvent(new Event("cart-updated"));
+  };
+
+  const handleQuantityChange = (itemKey, change) => {
+    const item = cartItems.find(i => i.key === itemKey);
+    if (!item) return;
+
+    const newQty = item.qty + change;
+    if (newQty < 1) return;
+
+    updateQuantity(itemKey, newQty);
+  };
+
   const handleFormSubmit = async (formData) => {
     try {
       const response = await fetch("http://localhost:5000/send-order", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
           cartItems: cartItems.map(item => ({
@@ -44,11 +87,14 @@ const FloatingCart = ({ cartItems = [], removeItem, updateQuantity }) => {
           totalPrice: totalPrice
         }),
       });
-  
+
       const result = await response.json();
-  
+
       if (result.success) {
         alert(`Thank you ${formData.firstName}! Your order has been received.`);
+        // Optional: clear cart after successful order
+        localStorage.removeItem("cart");
+        setCartItems([]);
         setIsFormOpen(false);
       } else {
         alert("Failed to send email. Please try again.");
@@ -59,18 +105,7 @@ const FloatingCart = ({ cartItems = [], removeItem, updateQuantity }) => {
     }
   };
 
-  const handleQuantityChange = (itemKey, newQty) => {
-    if (newQty < 1) return;
-    if (updateQuantity) {
-      updateQuantity(itemKey, newQty);
-    }
-  };
-
-  const totalPrice = cartItems.reduce(
-    (acc, item) => acc + item.price * item.qty,
-    0
-  );
-
+  const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
   const totalItems = cartItems.reduce((acc, item) => acc + item.qty, 0);
 
   return (
@@ -117,11 +152,16 @@ const FloatingCart = ({ cartItems = [], removeItem, updateQuantity }) => {
                     <h4 className="cart-item-name">{item.title}</h4>
                     <p className="cart-item-price">₱{item.price.toFixed(2)}</p>
                     
+                    {/* Show variations if any */}
+                    {item.flowerQty && <p><small>Flower Qty: {item.flowerQty}</small></p>}
+                    {item.size && <p><small>Size: {item.size}</small></p>}
+                    {item.addOns && <p><small>Add-on: {item.addOns}</small></p>}
+
                     <div className="cart-item-actions">
                       <div className="quantity-controls">
                         <button 
                           className="qty-btn qty-btn-minus"
-                          onClick={() => handleQuantityChange(item.key, item.qty - 1)}
+                          onClick={() => handleQuantityChange(item.key, -1)}
                           disabled={item.qty <= 1}
                           aria-label="Decrease quantity"
                         >
@@ -130,7 +170,7 @@ const FloatingCart = ({ cartItems = [], removeItem, updateQuantity }) => {
                         <span className="qty-display">{item.qty}</span>
                         <button 
                           className="qty-btn qty-btn-plus"
-                          onClick={() => handleQuantityChange(item.key, item.qty + 1)}
+                          onClick={() => handleQuantityChange(item.key, +1)}
                           aria-label="Increase quantity"
                         >
                           <BsPlus />
@@ -184,7 +224,7 @@ const FloatingCart = ({ cartItems = [], removeItem, updateQuantity }) => {
         )}
       </div>
 
-      {/* Backdrop Overlay */}
+      {/* Backdrop */}
       {isOpen && <div className="cart-backdrop" onClick={toggleCart}></div>}
 
       {/* Checkout Summary Modal */}
@@ -193,9 +233,7 @@ const FloatingCart = ({ cartItems = [], removeItem, updateQuantity }) => {
           <div className="checkout-modal-container" onClick={(e) => e.stopPropagation()}>
             <div className="checkout-modal-header">
               <h2>Order Summary</h2>
-              <button className="checkout-modal-close" onClick={closeCheckout}>
-                <BsX />
-              </button>
+              <button className="checkout-modal-close" onClick={closeCheckout}><BsX /></button>
             </div>
 
             <div className="checkout-modal-body">
@@ -208,6 +246,9 @@ const FloatingCart = ({ cartItems = [], removeItem, updateQuantity }) => {
                     <div className="checkout-item-info">
                       <h4>{item.title}</h4>
                       <p className="checkout-item-qty">Quantity: {item.qty}</p>
+                      {item.flowerQty && <p><small>{item.flowerQty}</small></p>}
+                      {item.size && <p><small>Size: {item.size}</small></p>}
+                      {item.addOns && <p><small>{item.addOns}</small></p>}
                       <p className="checkout-item-price">₱{item.price.toFixed(2)} each</p>
                     </div>
                     <div className="checkout-item-total">
@@ -234,23 +275,19 @@ const FloatingCart = ({ cartItems = [], removeItem, updateQuantity }) => {
             </div>
 
             <div className="checkout-modal-footer">
-              <button className="btn-secondary" onClick={closeCheckout}>
-                Back to Cart
-              </button>
+              <button className="btn-secondary" onClick={closeCheckout}>Back to Cart</button>
               <button className="btn-primary" onClick={handleProceedToPayment}>
                 Continue to Payment
               </button>
             </div>
 
             <p className="checkout-note">
-              <i className="fas fa-shield-alt"></i>
               Your payment information is secure and encrypted
             </p>
           </div>
         </div>
       )}
 
-      {/* Customer Information Form Modal */}
       <CheckoutFormModal
         isOpen={isFormOpen}
         onClose={() => setIsFormOpen(false)}

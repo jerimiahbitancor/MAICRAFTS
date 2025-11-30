@@ -36,34 +36,35 @@ const ProductDetail = () => {
 
   const addToCart = () => {
     let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-  
-    const uniqueKey =
-      size || flowerQty || addOns
-        ? `${product.id}-${size}-${flowerQty}-${addOns}`
-        : `${product.id}-${Date.now()}`;
-  
-    const existingItem = cart.find((item) => item.key === uniqueKey);
-  
+
+    // Create a consistent unique key based on selected options
+    const uniqueKey = `${product.id}-${size || "none"}-${flowerQty || "none"}-${addOns || "none"}`;
+
     const finalPrice = product.price + getAddOnPrice();
-  
-    if (existingItem) {
-      existingItem.qty += quantity;
-      existingItem.total = finalPrice * existingItem.qty;
+
+    // Look for existing item with SAME product + SAME variations
+    const existingItemIndex = cart.findIndex((item) => item.key === uniqueKey);
+
+    if (existingItemIndex !== -1) {
+      // Item exists → just increase quantity
+      cart[existingItemIndex].qty += quantity;
+      cart[existingItemIndex].total = finalPrice * cart[existingItemIndex].qty;
     } else {
+      // New variation → add as new item
       cart.push({
         key: uniqueKey,
         id: product.id,
         title: product.title,
         price: finalPrice,
         img: selectedImage,
-        qty: quantity,    // ✔ FIXED
+        qty: quantity,
         flowerQty,
         size,
         addOns,
         total: finalPrice * quantity,
-      });      
+      });
     }
-  
+
     localStorage.setItem("cart", JSON.stringify(cart));
     window.dispatchEvent(new Event("cart-updated"));
     alert("Added to cart!");
@@ -80,7 +81,7 @@ const ProductDetail = () => {
       <div className="container">
         {/* Breadcrumb */}
         <div className="breadcrumb">
-          <Link to="/">Home</Link> &gt; <Link to="/products">Products</Link> &gt; {product.title}
+          <Link to="/">Home</Link> › <Link to="/products">Products</Link> › {product.title}
         </div>
 
         {/* Main Content */}
@@ -189,7 +190,6 @@ const ProductDetail = () => {
           <h3>Product Description</h3>
           <p>{product.description}</p>
         </div>
-
 
         {/* Related Products */}
         <div className="related-section">

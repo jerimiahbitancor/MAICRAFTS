@@ -46,7 +46,7 @@ const Home = () => {
               </p>
               <div className="cta-container">
                 <Link to="/products" className="btn-primary-custom">Explore Products</Link>
-                <Link to="/about" className="btn-outline-custom">Learn Our Story</Link>
+                <Link to="/about-us" className="btn-outline-custom">Learn Our Story</Link>
               </div>
             </div>
           </div>

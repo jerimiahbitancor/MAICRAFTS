@@ -97,9 +97,10 @@ const Products = () => {
               <p className="hero-desc lead mb-4">
                 Order your Custom Gift Now!
               </p>
-              <Link to="/customize" className="btn hero-btn-primary">
-                Customize!
-              </Link>
+           {/* This works perfectly now */}
+<Link to="/?customize=true" className="btn hero-btn-primary">
+  Customize!
+</Link>
             </div>
           </div>
         </div>

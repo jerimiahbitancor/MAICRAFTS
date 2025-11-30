@@ -20,24 +20,25 @@ app.post("/send-order", async (req, res) => {
   const { firstName, lastName, email, message, cartItems, totalPrice } = req.body;
 
   const formattedItems = cartItems
-    .map(
-      (item) => `• ${item.name} — Qty: ${item.quantity} — ₱${item.price}`
-    )
+    .map((item) => `• ${item.name} — Qty: ${item.quantity} — ₱${item.price}`)
     .join("\n");
 
-  const mailOptions = {
-    from: `"Online Store" <YOUR_EMAIL@gmail.com>`,
-    to: "YOUR_EMAIL@gmail.com",
-    subject: `New Order from ${firstName} ${lastName}`,
+  // -----------------------------
+  // EMAIL TO STORE OWNER (YOU)
+  // -----------------------------
+  const adminMail = {
+    from: `"Online Store" <technoerror404@gmail.com>`,
+    to: "technoerror404@gmail.com",
+    subject: `🛒 New Order from ${firstName} ${lastName}`,
     text: `
-New Order Details:
+New Order Received:
 
 Customer:
 Name: ${firstName} ${lastName}
 Email: ${email}
 
-Message:
-${message || "No message"}
+Message from customer:
+${message || "No message provided"}
 
 -----------------------------------
 Order Summary:
@@ -48,57 +49,50 @@ Total Amount: ₱${totalPrice}
     `,
   };
 
-  try {
-    await transporter.sendMail(mailOptions);
-    res.json({ success: true, message: "Email Sent Successfully!" });
-  } catch (error) {
-    console.error("Error sending email:", error);
-    res.status(500).json({ success: false, message: "Failed to send email." });
-  }
-});
-
-// ========== SEND CUSTOM ORDER EMAIL ==========
-app.post("/send-custom-order", async (req, res) => {
-  const {
-    productType,
-    customDescription,
-    sizeScale,
-    additionalRequests,
-    contactNumber,
-    uploadedImage, // Base64 image string
-  } = req.body;
-
-  const mailOptions = {
-    from: `"MAICRAFTS.PH" <YOUR_EMAIL@gmail.com>`,
-    to: "YOUR_EMAIL@gmail.com",
-    subject: `New Custom Order (${productType})`,
+  // -----------------------------
+  // EMAIL TO CUSTOMER
+  // -----------------------------
+  const customerMail = {
+    from: `"MAICRAFTS" <technoerror404@gmail.com>`,
+    to: email,
+    subject: `Thank you for your order, ${firstName}!`,
     html: `
-      <h2>New Custom Order</h2>
+      <h2>Thank you for your order!</h2>
+      <p>Hi <strong>${firstName}</strong>,</p>
+      <p>We have received your order and will process it shortly.</p>
 
-      <p><strong>Product Type:</strong> ${productType}</p>
-      <p><strong>Description:</strong> ${customDescription}</p>
-      <p><strong>Size Scale:</strong> ${sizeScale}</p>
-      <p><strong>Additional Requests:</strong> ${additionalRequests}</p>
-      <p><strong>Contact Number:</strong> ${contactNumber}</p>
+      <h3>Order Summary</h3>
+      <pre style="font-size:14px;">${formattedItems}</pre>
 
-      <hr />
-      <h3>Uploaded Image:</h3>
-      ${
-        uploadedImage
-          ? `<img src="${uploadedImage}" alt="Uploaded Image" style="max-width:300px; border:1px solid #ccc;" />`
-          : "<p>No image uploaded.</p>"
-      }
-    `,
+      <p><strong>Total Amount:</strong> ₱${totalPrice}</p>
+
+      <hr/>
+      <p>If you have questions, reply to this email anytime.</p>
+      <p><strong>MAICRAFTS.PH</strong></p>
+    `
   };
 
   try {
-    await transporter.sendMail(mailOptions);
-    res.json({ success: true });
+    // Send email to admin
+    await transporter.sendMail(adminMail);
+
+     // Log customer email target BEFORE sending
+    console.log("Sending to customer:", customerMail.to);
+
+    // Send email to customer
+    await transporter.sendMail(customerMail);
+
+    console.log("📧 Order emails sent (admin + customer)");
+
+    res.json({ success: true, message: "Emails sent successfully!" });
+
   } catch (error) {
-    console.error("Error sending custom order:", error);
-    res.status(500).json({ success: false });
+    console.error("Error sending email:", error);
+    res.status(500).json({ success: false, message: "Failed to send emails." });
   }
 });
 
-// ========== SERVER START ==========
-app.listen(4000, () => console.log("Server running on port 4000"));
+
+app.listen(5000, () => {
+  console.log("🚀 Server running on http://localhost:5000");
+});

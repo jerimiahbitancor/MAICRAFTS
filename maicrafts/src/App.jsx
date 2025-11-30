@@ -11,6 +11,7 @@ import ProductDetail2 from "./pages/ProductDetail2.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
 import Footer from "./components/Footer.jsx";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
   const [cart, setCart] = useState([]);

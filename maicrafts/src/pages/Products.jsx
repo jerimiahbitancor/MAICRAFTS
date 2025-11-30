@@ -195,7 +195,6 @@ return (
         </div>
       </div>
     </section>
-    <FloatingCart cartItems={cartItems} removeItem={removeItem} />
   </>
 );
 };

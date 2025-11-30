@@ -13,6 +13,7 @@
     "@emailjs/browser": "^4.4.1",
     "@tailwindcss/vite": "^4.1.17",
     "bootstrap": "^5.3.8",
+    "cloudinary": "^2.8.0",
     "lucide-react": "^0.555.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

@@ -96,78 +96,118 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {
     setErrors({});
   };
 
-  const handleSubmit = async () => {
-    if (!validateForm()) {
-      Swal.fire({
-        icon: "warning",
-        title: "Missing Fields",
-        text: "Please fill in all required fields.",
-        background: "#462c14",
-        color: "#ffbd3a",
-        confirmButtonColor: "#ffbd3a",
-      });
-      return;
-    }
-
-    // Show loading
+ const handleSubmit = async () => {
+  if (!validateForm()) {
     Swal.fire({
-      title: "Submitting your custom order...",
-      allowOutsideClick: false,
-      didOpen: () => Swal.showLoading(),
+      icon: "warning",
+      title: "Missing Fields",
+      text: "Please fill in all required fields.",
       background: "#462c14",
       color: "#ffbd3a",
+      confirmButtonColor: "#ffbd3a",
+    });
+    return;
+  }
+
+  // Show loading
+  Swal.fire({
+    title: "Submitting your custom order...",
+    allowOutsideClick: false,
+    didOpen: () => Swal.showLoading(),
+    background: "#462c14",
+    color: "#ffbd3a",
+  });
+
+  const templateParams = {
+    productType: formData.productType,
+    customDescription: formData.customDescription,
+    sizeScale: formData.sizeScale || "Not specified",
+    additionalRequests: formData.additionalRequests || "None",
+    customerEmail: formData.customerEmail,
+    shippingAddress: formData.shippingAddress,
+    paymentOption: formData.paymentOption,
+    uploadedImage: uploadedImageUrl
+      ? `<img src="${uploadedImageUrl}" alt="Reference" style="max-width: 100%; border-radius: 12px; margin: 10px 0;" />`
+      : "No image uploaded",
+  };
+
+  try {
+    // 1. Send email via EmailJS
+    await emailjs.send(
+      "service_qxu1bhv",
+      "template_qy8mwbr",
+      templateParams,
+      "s9m7Qu_NeupEAwhmQ"
+    );
+
+    // 2. Log to Google Sheets via Google Forms (updated URL)
+    const googleFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfNfhrq39fVn68GutnkaMGjFGkOLRNMx0oUmRjooM1px-vbzw/formResponse';  // Corrected submission URL
+    const formDataForGoogle = new FormData();
+    formDataForGoogle.append('entry.1158375907', formData.productType);
+    formDataForGoogle.append('entry.1294796817', formData.customDescription);
+    formDataForGoogle.append('entry.1829940933', formData.sizeScale || 'Not specified');
+    formDataForGoogle.append('entry.1518934396', formData.additionalRequests || 'None');
+    formDataForGoogle.append('entry.919297994', formData.shippingAddress);
+    formDataForGoogle.append('entry.511025658', formData.paymentOption);
+    formDataForGoogle.append('entry.1987350040', formData.customerEmail);
+    // Note: Removed image append since your form likely doesn't have an image field. If it does, add: formDataForGoogle.append('entry.YOUR_IMAGE_ID', uploadedImageUrl);
+
+    await fetch(googleFormUrl, {
+      method: 'POST',
+      body: formDataForGoogle,
+      mode: 'no-cors',  // Prevents CORS issues
     });
 
-    const templateParams = {
-      productType: formData.productType,
-      customDescription: formData.customDescription,
-      sizeScale: formData.sizeScale || "Not specified",
-      additionalRequests: formData.additionalRequests || "None",
-      customerEmail: formData.customerEmail,
-      shippingAddress: formData.shippingAddress,
-      paymentOption: formData.paymentOption,
-      uploadedImage: uploadedImageUrl
-        ? `<img src="${uploadedImageUrl}" alt="Reference" style="max-width: 100%; border-radius: 12px; margin: 10px 0;" />`
-        : "No image uploaded",
-    };
+    await Swal.fire({
+      icon: "success",
+      title: "Thank You!",
+      html: `
+        <p style="color:#d4a574;">Your custom order has been submitted!</p>
+        <p style="color:#aaa; font-size:0.9rem;">We'll contact you soon at<br><strong>${formData.customerEmail}</strong></p>
+      `,
+      background: "linear-gradient(135deg, #462c14, #5a3818)",
+      color: "#fff",
+      confirmButtonColor: "#ffbd3a",
+      customClass: { popup: "swal-luxury-popup", confirmButton: "swal-gold-btn" },
+    });
 
+    resetForm();
+    onClose();
+  } catch (error) {
+    console.error("Submission Error:", error);
+    // Fallback: Try logging to Sheets even if EmailJS fails
     try {
-      await emailjs.send(
-        "service_qxu1bhv",
-        "template_qy8mwbr",
-        templateParams,
-        "s9m7Qu_NeupEAwhmQ"
-      );
-
-      await Swal.fire({
-        icon: "success",
-        title: "Thank You!",
-        html: `
-          <p style="color:#d4a574;">Your custom order has been submitted!</p>
-          <p style="color:#aaa; font-size:0.9rem;">We'll contact you soon at<br><strong>${formData.customerEmail}</strong></p>
-        `,
-        background: "linear-gradient(135deg, #462c14, #5a3818)",
-        color: "#fff",
-        confirmButtonColor: "#ffbd3a",
-        customClass: { popup: "swal-luxury-popup", confirmButton: "swal-gold-btn" },
+      const googleFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfNfhrq39fVn68GutnkaMGjFGkOLRNMx0oUmRjooM1px-vbzw/formResponse';
+      const formDataForGoogle = new FormData();
+      formDataForGoogle.append('entry.1158375907', formData.productType);
+      formDataForGoogle.append('entry.1294796817', formData.customDescription);
+      formDataForGoogle.append('entry.1829940933', formData.sizeScale || 'Not specified');
+      formDataForGoogle.append('entry.1518934396', formData.additionalRequests || 'None');
+      formDataForGoogle.append('entry.919297994', formData.shippingAddress);
+      formDataForGoogle.append('entry.511025658', formData.paymentOption);
+      formDataForGoogle.append('entry.1987350040', formData.customerEmail);
+      // Same note: No image append
+      await fetch(googleFormUrl, {
+        method: 'POST',
+        body: formDataForGoogle,
+        mode: 'no-cors',
       });
-
-      resetForm();
-      onClose();
-    } catch (error) {
-      console.error("EmailJS Error:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Submission Failed",
-        text: "We received your order, but email failed. Please message us on Facebook/Instagram!",
-        background: "#462c14",
-        color: "#fff",
-        confirmButtonColor: "#ffbd3a",
-      });
-      resetForm();
-      onClose();
+    } catch (sheetError) {
+      console.error("Google Sheets logging failed:", sheetError);
     }
-  };
+
+    Swal.fire({
+      icon: "error",
+      title: "Submission Failed",
+      text: "We received your order, but email failed. Please message us on Facebook/Instagram!",
+      background: "#462c14",
+      color: "#fff",
+      confirmButtonColor: "#ffbd3a",
+    });
+    resetForm();
+    onClose();
+  }
+};
 
   if (!isOpen) return null;
 

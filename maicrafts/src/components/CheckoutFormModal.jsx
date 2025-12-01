@@ -145,6 +145,57 @@ const CheckoutFormModal = ({ isOpen, onClose, onSubmit, cartItems, totalPrice })
                 placeholder="Special requests..." rows="3" />
             </div>
 
+            {/* SHIPPING INFORMATION */}
+            <div className="form-group full-width">
+              <label>Shipping Address *</label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                className={errors.address ? "error" : ""}
+                placeholder="House No. / Street / Barangay"
+              />
+              {errors.address && <span className="error-message">{errors.address}</span>}
+            </div>
+
+            {/* BILLING OPTION */}
+            <div className="form-group full-width billing-section">
+              <label>Billing Method *</label>
+
+              <div className="billing-radio-group">
+                <label className="billing-radio">
+                  <input
+                    type="radio"
+                    name="billingMethod"
+                    value="COD"
+                    checked={formData.billingMethod === "COD"}
+                    onChange={handleChange}
+                  />
+                  <span className="custom-radio"></span>
+                  Cash on Delivery (COD)
+                </label>
+
+                <label className="billing-radio">
+                  <input
+                    type="radio"
+                    name="billingMethod"
+                    value="GCash"
+                    checked={formData.billingMethod === "GCash"}
+                    onChange={handleChange}
+                  />
+                  <span className="custom-radio"></span>
+                  GCash
+                </label>
+              </div>
+
+              {errors.billingMethod && (
+                <span className="error-message">{errors.billingMethod}</span>
+              )}
+            </div>
+
+
+
             {/* Order Summary - same as before */}
             <div className="order-summary-section">
               <h3>Your Order ({totalQuantity} {totalQuantity === 1 ? 'item' : 'items'})</h3>

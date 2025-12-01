@@ -1,42 +1,94 @@
-/* CheckoutFormModal.css */
+/* src/components/components-css/CheckoutFormModal.css */
 :root {
   --gold-color: #ffbd3a;
   --dark-brown: #462c14;
   --light-brown: #d4a574;
   --white: #fff;
+  --text-light: rgba(255, 255, 255, 0.9);
+  --text-muted: rgba(255, 255, 255, 0.6);
+  --border-gold: rgba(255, 189, 58, 0.3);
 }
 
-/* Form Modal Overlay */
+/* Overlay */
 .checkout-form-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.7);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10001;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(8px);
+  animation: fadeIn 0.3s ease-out;
+  
 }
 
-/* Form Modal Container */
+/* Modal Container */
 .checkout-form-modal {
   background: var(--dark-brown);
-  border-radius: 20px;
-  width: 90%;
-  max-width: 550px;
-  max-height: 90vh;
-  overflow-y: auto;
+  border-radius: 24px;
+  width: 92%;
+  max-width: 620px;
+  max-height: 92vh;
+  overflow: hidden;
   color: var(--white);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-  animation: modalSlideIn 0.4s ease-out;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+  animation: var(--gold-color);
+  animation: modalSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow-y: scroll;
+
 }
 
-@keyframes modalSlideIn {
+/* ────────────────────────────────
+   LUXURY GOLD & DARK BROWN SCROLLBAR 
+   Matches your Checkout Modal perfectly
+   ──────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 11px;           /* Vertical scrollbar */
+  height: 11px;          /* Horizontal (if ever needed) */
+}
+
+::-webkit-scrollbar-track {
+  background: #3a200d;   /* Deep dark brown - same as your gradient bottom */
+  border-radius: 10px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(145deg, #ffbd3a, #e6a830); /* Your exact gold gradient */
+  border-radius: 10px;
+  border: 2px solid #462c14; /* Dark brown border for depth */
+  box-shadow: 
+    0 0 8px rgba(255, 189, 58, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(145deg, #ffb32b, #d89b20);
+  box-shadow: 
+    0 0 15px rgba(255, 189, 58, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+::-webkit-scrollbar-corner {
+  background: #3a200d;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalSlideUp {
   from {
-    transform: translateY(-50px);
+    transform: translateY(60px);
     opacity: 0;
   }
   to {
@@ -45,48 +97,60 @@
   }
 }
 
-/* Form Modal Header */
+/* Header */
 .form-modal-header {
-  margin: 22px;
-  padding: 25px;
-  border-bottom: 1px solid var(--light-brown);
-  background-color: var(--dark-brown);
+  padding: 28px 32px 20px;
+  background: linear-gradient(to bottom, #5a3818, var(--dark-brown));
+  border-bottom: 1px solid var(--border-gold);
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: sticky;
-  top: 22px;
-  z-index: 1;
+  top: 0;
+  z-index: 10;
 }
 
 .form-modal-header h2 {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 2rem;
   color: var(--gold-color);
   font-family: 'Carattere', cursive;
+  letter-spacing: 1px;
 }
 
 .close-form-modal {
-  font-size: 1.8rem;
+  font-size: 2rem;
   cursor: pointer;
   color: var(--gold-color);
-  transition: 0.3s;
+  transition: all 0.4s ease;
 }
 
 .close-form-modal:hover {
   color: var(--white);
-  transform: rotate(90deg);
+  transform: rotate(180deg) scale(1.1);
 }
 
 /* Form Content */
 .form-content {
-  padding: 20px 35px;
+  padding: 10px 32px 20px;
   font-family: 'Playfair Display', serif;
+}
+
+/* Grid for Name Fields */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 10px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
 }
 
 /* Form Group */
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .form-group label {
@@ -94,98 +158,188 @@
   margin-bottom: 8px;
   color: var(--gold-color);
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
 }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.1);
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.08);
   border: 2px solid transparent;
-  border-radius: 12px;
+  border-radius: 14px;
   color: var(--white);
   font-size: 1rem;
   font-family: 'Playfair Display', serif;
   transition: all 0.3s ease;
   box-sizing: border-box;
+  backdrop-filter: blur(4px);
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
+  font-style: italic;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.14);
   border-color: var(--gold-color);
+  box-shadow: 0 0 0 3px rgba(255, 189, 58, 0.2);
 }
 
 .form-group textarea {
   resize: vertical;
-  min-height: 100px;
+  min-height: 90px;
 }
 
-/* Error State */
+/* Error States */
 .form-group input.error,
 .form-group textarea.error {
   border-color: #ff4444;
+  background: rgba(255, 68, 68, 0.1);
 }
 
 .error-message {
-  display: block;
   color: #ff6b6b;
   font-size: 0.85rem;
   margin-top: 6px;
+  display: block;
   font-style: italic;
+  animation: shake 0.3s;
 }
 
-/* Order Summary Mini */
-.order-summary-mini {
-  margin-top: 25px;
-  padding: 16px;
-  background: rgba(212, 165, 116, 0.15);
-  border-radius: 12px;
-  border: 1px solid var(--light-brown);
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* Order Summary Section */
+.order-summary-section {
+  margin: 30px -32px 0;
+  padding: 24px 32px;
+  background: linear-gradient(to top, #3a200d, #5a3818);
+  border-top: 2px solid var(--gold-color);
+}
+
+.order-summary-section h3 {
+  margin: 0 0 18px 0;
+  font-size: 1.35rem;
+  color: var(--gold-color);
+  text-align: center;
+  font-family: 'Carattere', cursive;
+  letter-spacing: 1px;
+}
+
+/* Order Items List */
+.order-items-list {
+  max-height: 280px;
+  overflow-y: auto;
+  margin: 16px 0;
+  padding-right: 8px;
+}
+
+.order-items-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.order-items-list::-webkit-scrollbar-track {
+  background: rgba(255, 189, 58, 0.1);
+}
+
+.order-items-list::-webkit-scrollbar-thumb {
+  background: var(--gold-color);
+  border-radius: 3px;
+}
+
+.order-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px dashed rgba(212, 165, 116, 0.3);
+}
+
+.order-item-row:last-child {
+  border-bottom: none;
+}
+
+.item-title {
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: var(--white);
+  font-size: 1rem;
+}
+
+.item-meta {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.item-meta span {
+  display: block;
+}
+
+.order-item-price {
+  text-align: right;
+  color: var(--text-light);
+  font-size: 0.95rem;
+}
+
+.order-item-price strong {
+  display: block;
+  color: var(--gold-color);
+  font-size: 1.1rem;
+  margin-top: 4px;
+}
+
+/* Total Breakdown */
+.order-total-breakdown {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--light-brown);
 }
 
 .summary-row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 0.95rem;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: var(--text-light);
 }
 
 .summary-row.total {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--light-brown);
-  font-size: 1.2rem;
-  color: var(--gold-color);
-}
-
-.summary-row.total strong {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 2px solid var(--gold-color);
+  font-size: 1.35rem;
+  font-weight: 700;
   color: var(--gold-color);
 }
 
 /* Form Actions */
 .form-actions {
-  padding: 20px 35px 30px;
+  padding: 24px 32px 32px;
   display: flex;
-  gap: 12px;
+  gap: 16px;
+  background: var(--dark-brown);
 }
 
 .btn-cancel {
   flex: 1;
-  padding: 14px;
+  padding: 16px;
   background: transparent;
   border: 2px solid var(--light-brown);
   color: var(--light-brown);
-  border-radius: 12px;
+  border-radius: 14px;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.05rem;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: 'Playfair Display', serif;
@@ -194,51 +348,125 @@
 .btn-cancel:hover {
   background: var(--light-brown);
   color: var(--dark-brown);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(212, 165, 116, 0.3);
 }
 
 .btn-confirm-order {
   flex: 1;
-  padding: 14px;
-  background: var(--gold-color);
+  padding: 16px;
+  background: linear-gradient(135deg, #ffbd3a, #e6a830);
   color: var(--dark-brown);
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
   font-family: 'Playfair Display', serif;
+  box-shadow: 0 4px 15px rgba(255, 189, 58, 0.4);
 }
 
 .btn-confirm-order:hover {
-  background: #e6a830;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 189, 58, 0.4);
+  background: linear-gradient(135deg, #e6a830, #cc9900);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(255, 189, 58, 0.5);
 }
 
-/* Responsive Design */
-@media (max-width: 600px) {
+/* Responsive */
+@media (max-width: 640px) {
   .checkout-form-modal {
     width: 95%;
-    max-height: 95vh;
+    border-radius: 20px;
   }
 
-  .form-content {
-    padding: 15px 25px;
+  .form-grid {
+    grid-template-columns: 1fr;
   }
 
-  .form-actions {
-    padding: 15px 25px 25px;
-    flex-direction: column;
+  .form-content,
+  .form-actions,
+  .order-summary-section {
+    padding-left: 24px;
+    padding-right: 24px;
   }
 
   .form-modal-header {
-    padding: 20px;
-    margin: 15px;
+    padding: 24px 24px 16px;
   }
 
   .form-modal-header h2 {
-    font-size: 1.4rem;
+    font-size: 1.7rem;
   }
+
+  .order-items-list {
+    max-height: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn-cancel,
+  .btn-confirm-order {
+    padding: 16px;
+  }
+}
+
+/* ─────── SWEETALERT2 – ALWAYS ON TOP + LUXURY THEME ─────── */
+
+.swal2-popup,
+.swal2-modal,
+.swal2-container {
+  z-index: 100000 !important;   /* Way above everything (modals, cart, navbar, etc.) */
+}
+
+.swal-luxury-popup,
+.swal2-popup {
+  border: 3px solid #ffbd3a !important;
+  border-radius: 24px !important;
+  background: linear-gradient(135deg, #462c14, #5a3818) !important;
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.7),
+    0 0 30px rgba(255, 189, 58, 0.4) !important;
+}
+
+.swal2-title {
+  color: #ffbd3a !important;
+  font-family: 'Carattere', cursive !important;
+  font-size: 2.2rem !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.swal2-html-container {
+  color: #d4a574 !important;
+  font-size: 1.1rem !important;
+}
+
+.swal2-confirm.swal-gold-btn,
+.swal2-styled.swal2-confirm {
+  
+  background: linear-gradient(135deg, #ffbd3a, #e6a830) !important;
+  color: #462c14 !important;
+  font-weight: bold !important;
+  font-size: 1.1rem !important;
+  border: none !important;
+  border-radius: 14px !important;
+  padding: 14px 36px !important;
+  box-shadow: 0 6px 20px rgba(255, 189, 58, 0.5) !important;
+  transition: all 0.3s ease !important;
+}
+
+.swal2-confirm.swal-gold-btn:hover,
+.swal2-styled.swal2-confirm:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 12px 30px rgba(255, 189, 58, 0.7) !important;
+  background: linear-gradient(135deg, #ffb32b, #d89b20) !important;
+}
+
+/* Loading spinner in gold */
+.swal2-loader {
+  border-color: #ffbd3a transparent #ffbd3a transparent !important;
 }

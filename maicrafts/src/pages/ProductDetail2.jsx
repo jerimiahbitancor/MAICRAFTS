@@ -4,9 +4,11 @@ import { useParams, Link } from "react-router-dom";
 import { ShoppingCart } from "lucide-react";
 import "../css/ProductDetail2.css";
 import { products } from "../data/productsData";
+import CheckoutFormModal from "../components/CheckoutFormModal";
 
 const ProductDetail2 = () => {
   const { id } = useParams();
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   // Filter crochet products
   const crochetProducts = products.filter((p) =>
@@ -16,12 +18,11 @@ const ProductDetail2 = () => {
   // Selected product
   const product = crochetProducts.find((p) => p.id === id);
 
-  // Hooks MUST ALWAYS be here (before condition)
+  // Hooks BEFORE any conditional
   const thumbnails = product?.images || [product?.img];
   const [selectedImage, setSelectedImage] = useState(thumbnails[0]);
   const [quantity, setQuantity] = useState(1);
 
-  // If product does NOT exist → return UI
   if (!product) {
     return <h2 className="text-center mt-5">Crochet product not found.</h2>;
   }
@@ -47,7 +48,7 @@ const ProductDetail2 = () => {
         price: product.price,
         img: selectedImage,
         qty: quantity,
-        total: product.price * quantity,
+        total: totalPrice,
       });
     }
 
@@ -56,7 +57,24 @@ const ProductDetail2 = () => {
     alert("Added to cart!");
   };
 
-  // Related products
+  // BUY NOW Function
+  const buyNow = () => {
+    const checkoutItem = [
+      {
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        img: selectedImage,
+        qty: quantity,
+        total: totalPrice
+      }
+    ];
+
+    localStorage.setItem("checkout_item", JSON.stringify(checkoutItem));
+    setIsCheckoutOpen(true);
+  };
+
+  // Related Products
   const relatedProducts = crochetProducts
     .filter((p) => p.id !== product.id)
     .slice(0, 4);
@@ -74,8 +92,6 @@ const ProductDetail2 = () => {
             <div className="pd-image-wrapper">
               <img src={selectedImage} className="pd-main-image" />
             </div>
-
-           
           </div>
 
           {/* RIGHT */}
@@ -117,7 +133,9 @@ const ProductDetail2 = () => {
                 <ShoppingCart size={20} /> Add to Cart
               </button>
 
-              <button className="pd-buy">Buy Now</button>
+              <button className="pd-buy" onClick={buyNow}>
+                Buy Now
+              </button>
             </div>
           </div>
         </div>
@@ -146,6 +164,14 @@ const ProductDetail2 = () => {
             ))}
           </div>
         </div>
+
+        {/* CHECKOUT MODAL */}
+        <CheckoutFormModal
+          isOpen={isCheckoutOpen}
+          onClose={() => setIsCheckoutOpen(false)}
+          cartItems={JSON.parse(localStorage.getItem("checkout_item") || "[]")}
+          totalPrice={totalPrice}
+        />
 
       </div>
     </div>

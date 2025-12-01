@@ -2,10 +2,60 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    
+    <!-- FAVICON: Your real logo from public/logo.webp -->
+    <link rel="icon" type="image/webp" href="/logo.webp" />
+    <link rel="apple-touch-icon" href="/logo.webp" />
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>maicrafts</title>
+    
+    <!-- Dynamic Animated Title -->
+    <title>Maicrafts</title>
+    
+    <!-- Animated Typing Title Script -->
+    <script>
+      // Luxury typing animation for "Maicrafts"
+      const titleText = "Maicrafts! -";
+      const typingSpeed = 200;   // milliseconds per letter
+      const pauseBeforeDelete = 2000;
+      const deleteSpeed = 100;
+
+      let i = 0;
+      let isDeleting = false;
+
+      function typeWriter() {
+        const currentTitle = isDeleting 
+          ? titleText.substring(0, i--) 
+          : titleText.substring(0, i++);
+
+        document.title = currentTitle + " ❀";
+
+        if (!isDeleting && i === titleText.length) {
+          setTimeout(() => { isDeleting = true; typeWriter(); }, pauseBeforeDelete);
+        } else if (isDeleting && i === 0) {
+          isDeleting = false;
+          setTimeout(typeWriter, 500);
+        } else {
+          setTimeout(typeWriter, isDeleting ? deleteSpeed : typingSpeed);
+        }
+      }
+
+      // Start animation when page loads
+      window.onload = () => {
+        setTimeout(typeWriter, 800);
+      };
+    </script>
+
+    <!-- Optional: Add a subtle glow effect in tab -->
+    <style>
+      @keyframes pulse {
+        0% { opacity: 0.7; }
+        50% { opacity: 1; }
+        100% { opacity: 0.7; }
+      }
+    </style>
   </head>
+  
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>

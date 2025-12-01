@@ -45,7 +45,7 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {
       // Upload to Cloudinary and get URL
       const formDataUpload = new FormData();  // Renamed to avoid conflict
       formDataUpload.append('file', file);
-      formDataUpload.append('upload_preset', 'maicrafts');  // Your preset name
+      formDataUpload.append('upload_preset', 'maicrafts');  // Your preset name 
 
       fetch(`https://api.cloudinary.com/v1_1/duilngnnp/image/upload`, {  // Replaced YOUR_CLOUD_NAME
         method: 'POST',

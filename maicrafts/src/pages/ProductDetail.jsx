@@ -127,7 +127,69 @@ const ProductDetail = () => {
     };
   };
 
+  
   const breakdown = getBreakdownDetails();
+
+// Remove your current handleFormSubmit function and replace it with:
+
+const handleCheckoutSubmit = async (orderData) => {
+  try {
+    console.log("📤 Received order data from modal:", orderData);
+    
+    // Check if cartItems exists in orderData
+    if (!orderData.cartItems) {
+      console.error("❌ cartItems is missing from orderData!");
+      throw new Error("Cart items missing");
+    }
+    
+    // Prepare order data for backend
+    const completeOrderData = {
+      firstName: orderData.firstName || "",
+      lastName: orderData.lastName || "",
+      email: orderData.email || "",
+      message: orderData.message || "No message provided",
+      address: orderData.address || "",
+      billingMethod: orderData.billingMethod || "",
+      cartItems: orderData.cartItems.map(item => ({
+        name: item.title,
+        quantity: item.qty,
+        price: item.price,
+        flowerQty: item.flowerQty,
+        size: item.size,
+        addOns: item.addOns
+      })),
+      totalPrice: orderData.totalPrice || totalPrice
+    };
+
+    console.log("📤 Sending to backend:", completeOrderData);
+
+    // Send to backend
+    const response = await fetch("http://localhost:5000/send-order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(completeOrderData),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || "Failed to process order");
+    }
+
+    // Clear cart after successful order
+    localStorage.removeItem("cart");
+    localStorage.removeItem("checkout_item");
+    window.dispatchEvent(new Event("cart-updated"));
+
+    return result;
+
+  } catch (error) {
+    console.error("❌ Email sending error:", error);
+    throw error;
+  }
+};
 
   return (
     <div className="product-detail-page">
@@ -228,6 +290,7 @@ const ProductDetail = () => {
                   onClick={() => {
                     const checkoutItem = [
                       {
+                        key: `${product.id}-${size}-${flowerQty}-${addOns || "none"}`,
                         id: product.id,
                         title: product.title,
                         price: unitPrice,
@@ -238,7 +301,7 @@ const ProductDetail = () => {
                         addOns,
                         total: totalPrice,
                       },
-                    ];
+                    ];                    
 
                     localStorage.setItem("checkout_item", JSON.stringify(checkoutItem));
                     setIsCheckoutOpen(true);
@@ -288,6 +351,7 @@ const ProductDetail = () => {
         <CheckoutFormModal
           isOpen={isCheckoutOpen}
           onClose={() => setIsCheckoutOpen(false)}
+          onSubmit={handleCheckoutSubmit} 
           cartItems={JSON.parse(localStorage.getItem("checkout_item") || "[]")}
           totalPrice={totalPrice}
         />

@@ -9,7 +9,9 @@ const CheckoutFormModal = ({ isOpen, onClose, onSubmit, cartItems, totalPrice })
     firstName: "",
     lastName: "",
     email: "",
-    message: ""
+    message: "",
+    address: "",
+    billingMethod: ""
   });
 
   const [errors, setErrors] = useState({});
@@ -29,6 +31,9 @@ const CheckoutFormModal = ({ isOpen, onClose, onSubmit, cartItems, totalPrice })
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Please enter a valid email";
     }
+    if (!formData.address.trim()) newErrors.address = "Shipping address is required";
+    if (!formData.billingMethod) newErrors.billingMethod = "Please select a billing method";
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -48,7 +53,6 @@ const CheckoutFormModal = ({ isOpen, onClose, onSubmit, cartItems, totalPrice })
       return;
     }
 
-    // Loadinggerger
     Swal.fire({
       title: "Sending Order...",
       text: "Please wait",
@@ -62,9 +66,12 @@ const CheckoutFormModal = ({ isOpen, onClose, onSubmit, cartItems, totalPrice })
     });
 
     try {
-      await onSubmit(formData); // your backend call
+      await onSubmit({
+        ...formData,
+        cartItems,
+        totalPrice
+      });
 
-      // SUCCESS — Luxury Alert
       await Swal.fire({
         icon: "success",
         title: `Thank You, ${formData.firstName}!`,
@@ -86,8 +93,14 @@ const CheckoutFormModal = ({ isOpen, onClose, onSubmit, cartItems, totalPrice })
         }
       });
 
-      // Reset & close
-      setFormData({ firstName: "", lastName: "", email: "", message: "" });
+      setFormData({ 
+        firstName: "", 
+        lastName: "", 
+        email: "", 
+        message: "",
+        address: "",
+        billingMethod: ""
+      });
       onClose();
 
     } catch (err) {
@@ -105,6 +118,7 @@ const CheckoutFormModal = ({ isOpen, onClose, onSubmit, cartItems, totalPrice })
   const totalQuantity = cartItems.reduce((sum, item) => sum + item.qty, 0);
 
   if (!isOpen) return null;
+  
 
   return (
     <div className="checkout-form-overlay" onClick={onClose}>
@@ -116,36 +130,57 @@ const CheckoutFormModal = ({ isOpen, onClose, onSubmit, cartItems, totalPrice })
 
         <form onSubmit={handleSubmit}>
           <div className="form-content">
-            {/* Form fields - unchanged */}
             <div className="form-grid">
               <div className="form-group">
                 <label>First Name *</label>
-                <input type="text" name="firstName" value={formData.firstName} onChange={handleChange}
-                  className={errors.firstName ? "error" : ""} placeholder="Juan" />
+                <input 
+                  type="text" 
+                  name="firstName" 
+                  value={formData.firstName} 
+                  onChange={handleChange}
+                  className={errors.firstName ? "error" : ""} 
+                  placeholder="Juan" 
+                />
                 {errors.firstName && <span className="error-message">{errors.firstName}</span>}
               </div>
               <div className="form-group">
                 <label>Last Name *</label>
-                <input type="text" name="lastName" value={formData.lastName} onChange={handleChange}
-                  className={errors.lastName ? "error" : ""} placeholder="Dela Cruz" />
+                <input 
+                  type="text" 
+                  name="lastName" 
+                  value={formData.lastName} 
+                  onChange={handleChange}
+                  className={errors.lastName ? "error" : ""} 
+                  placeholder="Dela Cruz" 
+                />
                 {errors.lastName && <span className="error-message">{errors.lastName}</span>}
               </div>
             </div>
 
             <div className="form-group full-width">
               <label>Email Address *</label>
-              <input type="email" name="email" value={formData.email} onChange={handleChange}
-                className={errors.email ? "error" : ""} placeholder="juan@gmail.com" />
+              <input 
+                type="email" 
+                name="email" 
+                value={formData.email} 
+                onChange={handleChange}
+                className={errors.email ? "error" : ""} 
+                placeholder="juan@gmail.com" 
+              />
               {errors.email && <span className="error-message">{errors.email}</span>}
             </div>
 
             <div className="form-group full-width">
               <label>Message (Optional)</label>
-              <textarea name="message" value={formData.message} onChange={handleChange}
-                placeholder="Special requests..." rows="3" />
+              <textarea 
+                name="message" 
+                value={formData.message} 
+                onChange={handleChange}
+                placeholder="Special requests..." 
+                rows="3" 
+              />
             </div>
 
-            {/* SHIPPING INFORMATION */}
             <div className="form-group full-width">
               <label>Shipping Address *</label>
               <input
@@ -159,10 +194,8 @@ const CheckoutFormModal = ({ isOpen, onClose, onSubmit, cartItems, totalPrice })
               {errors.address && <span className="error-message">{errors.address}</span>}
             </div>
 
-            {/* BILLING OPTION */}
             <div className="form-group full-width billing-section">
               <label>Billing Method *</label>
-
               <div className="billing-radio-group">
                 <label className="billing-radio">
                   <input
@@ -188,45 +221,50 @@ const CheckoutFormModal = ({ isOpen, onClose, onSubmit, cartItems, totalPrice })
                   GCash
                 </label>
               </div>
-
               {errors.billingMethod && (
                 <span className="error-message">{errors.billingMethod}</span>
               )}
             </div>
 
-
-
-            {/* Order Summary - same as before */}
             <div className="order-summary-section">
-              <h3>Your Order ({totalQuantity} {totalQuantity === 1 ? 'item' : 'items'})</h3>
-              <div className="order-items-list">
-                {cartItems.map(item => (
-                  <div key={item.key} className="order-item-row">
-                    <div className="order-item-info">
-                      <p className="item-title">{item.title}</p>
-                      <p className="item-meta">
-                        {item.flowerQty && <span>• {item.flowerQty}</span>}
-                        {item.size && <span>• {item.size}</span>}
-                        {item.addOns && <span>• {item.addOns}</span>}
-                      </p>
-                    </div>
-                    <div className="order-item-price">
-                      <span>{item.qty} × ₱{item.price.toFixed(2)}</span>
-                      <strong>₱{(item.price * item.qty).toFixed(2)}</strong>
-                    </div>
-                  </div>
-                ))}
-              </div>
+  <h3>Your Order ({totalQuantity} {totalQuantity === 1 ? 'item' : 'items'})</h3>
+  <div className="order-items-list">
+    {cartItems.map(item => {
+      // Use item.id instead of item.key
+      const metaItems = [];
+      if (item.flowerQty) metaItems.push({ id: `${item.id}-flower`, text: `• ${item.flowerQty}` });
+      if (item.size) metaItems.push({ id: `${item.id}-size`, text: `• ${item.size}` });
+      if (item.addOns) metaItems.push({ id: `${item.id}-addon`, text: `• ${item.addOns}` });
 
-              <div className="order-total-breakdown">
-                <div className="summary-row"><span>Subtotal</span><span>₱{totalPrice.toFixed(2)}</span></div>
-                <div className="summary-row"><span>Shipping Fee</span><span className="text-muted">To be calculated</span></div>
-                <div className="summary-row total">
-                  <strong>Total Amount</strong>
-                  <strong>₱{totalPrice.toFixed(2)}</strong>
-                </div>
-              </div>
-            </div>
+      return (
+        <div key={item.id} className="order-item-row">
+          <div className="order-item-info">
+            <p className="item-title">{item.title}</p>
+            <p className="item-meta">
+              {metaItems.map(meta => (
+                <span key={meta.id}>{meta.text} </span>
+              ))}
+            </p>
+          </div>
+          <div className="order-item-price">
+            <span>{item.qty} × ₱{item.price.toFixed(2)}</span>
+            <strong>₱{(item.price * item.qty).toFixed(2)}</strong>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+
+  <div className="order-total-breakdown">
+    <div className="summary-row"><span>Subtotal</span><span>₱{totalPrice.toFixed(2)}</span></div>
+    <div className="summary-row"><span>Shipping Fee</span><span className="text-muted">To be calculated</span></div>
+    <div className="summary-row total">
+      <strong>Total Amount</strong>
+      <strong>₱{totalPrice.toFixed(2)}</strong>
+    </div>
+  </div>
+</div>
+
           </div>
 
           <div className="form-actions">

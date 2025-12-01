@@ -1,17 +1,6 @@
 // CENTRALIZED PRODUCT STORAGE
 
 export const products = [
-    // Regular Gifts
-    {
-      id: "rainbow-rose-bouquet",
-      img: "https://i.imgur.com/9g0h1i2.jpg",
-      title: "Rainbow Rose Bouquet",
-      price: 799,
-      category: "Preserved Flowers",
-      occasion: ["Birthday", "Celebration"],
-      description:
-        "A vibrant bouquet featuring multi-colored rainbow roses. Perfect for celebrations, birthdays, and anyone who loves unique floral arrangements.",
-    },
     {
       id: "eternal-rose",
       img: "/flower1.svg",
@@ -33,16 +22,6 @@ export const products = [
       occasion: ["Birthday"],
       description:
         "A soft, adorable crochet bunny crafted with high-quality yarn. A perfect handmade gift for kids, couples, or collectors.",
-    },
-    {
-      id: "24k-rose",
-      img: "https://i.imgur.com/2p3q4r5.jpg",
-      title: "24K Gold Dipped Rose",
-      price: 1299,
-      category: "Luxury Gifts",
-      occasion: ["Anniversary", "Wedding"],
-      description:
-        "A real rose preserved and dipped in 24K gold. A luxurious keepsake gift for anniversaries, weddings, or special milestones.",
     },
   
     // Crochet Gifts — FIXED
@@ -178,20 +157,5 @@ export const products = [
       description:
         "A Christmas-themed crochet rose perfect as a festive, cozy holiday gift.",
     },
-  ];
-  
-  // Related Products
-  export const relatedProducts = [
-    { id: 1, img: "https://i.imgur.com/9g0h1i2.jpg", title: "Rainbow Rose Bouquet", price: 799 },
-    { id: 2, img: "https://i.imgur.com/3j4k5l6.jpg", title: "Eternal Bloom", price: 599 },
-    { id: 3, img: "https://i.imgur.com/7m8n9o0.jpg", title: "Crochet Dragon", price: 249 },
-    { id: 4, img: "https://i.imgur.com/2p3q4r5.jpg", title: "24K Rose", price: 1299 },
-  ];
-  
-  export const thumbnails = [
-    "https://i.imgur.com/9g0h1i2.jpg",
-    "https://i.imgur.com/3j4k5l6.jpg",
-    "https://i.imgur.com/7m8n9o0.jpg",
-    "https://i.imgur.com/2p3q4r5.jpg",
   ];
   

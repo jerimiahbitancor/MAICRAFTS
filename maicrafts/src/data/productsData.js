@@ -17,7 +17,7 @@ export const products = [
       id: "crochet-bunny-v1",
       img: "/crochet1.svg",
       title: "Handmade Crochet Bunny",
-      price: 159,
+      price: 300,
       category: "Crochet Gifts",
       occasion: ["Birthday"],
       description:
@@ -29,7 +29,7 @@ export const products = [
       id: "crochet-hello-kitty",
       img: new URL("../assets/doll.png", import.meta.url).href,
       title: "Handmade Crochet Hello Kitty",
-      price: 100,
+      price: 300,
       category: "Crochet Gifts",
       occasion: ["Birthday", "Anniversary"],
       description:
@@ -49,7 +49,7 @@ export const products = [
       id: "crochet-dog-v1",
       img: new URL("../assets/doll3.png", import.meta.url).href,
       title: "Handmade Crochet Dog",
-      price: 130,
+      price: 450,
       category: "Crochet Gifts",
       occasion: ["Birthday"],
       description:
@@ -59,7 +59,7 @@ export const products = [
       id: "crochet-corpse-bride",
       img: new URL("../assets/doll4.png", import.meta.url).href,
       title: "Handmade Crochet Corpse Bride",
-      price: 150,
+      price: 400,
       category: "Crochet Gifts",
       occasion: ["Anniversary", "Collector"],
       description:
@@ -69,7 +69,7 @@ export const products = [
       id: "crochet-dog-v2",
       img: new URL("../assets/doll5.png", import.meta.url).href,
       title: "Handmade Crochet Dog v2",
-      price: 200,
+      price: 350,
       category: "Crochet Gifts",
       occasion: ["Birthday"],
       description:
@@ -91,7 +91,7 @@ export const products = [
       id: "fuzzy-rose-1",
       img: new URL("../assets/flower.png", import.meta.url).href,
       title: "Giant Fuzzy Crochet Rose",
-      price: 250,
+      price: 100,
       category: "Preserved Flowers",
       occasion: ["Valentine's Day", "Mother's Day"],
       description:
@@ -101,7 +101,7 @@ export const products = [
       id: "fuzzy-rose-2",
       img: new URL("../assets/flower2.png", import.meta.url).href,
       title: "Deluxe Fuzzy Crochet Rose",
-      price: 400,
+      price: 100,
       category: "Preserved Flowers",
       occasion: ["Valentine's Day"],
       description:
@@ -111,7 +111,7 @@ export const products = [
       id: "fuzzy-rose-3",
       img: new URL("../assets/flower3.png", import.meta.url).href,
       title: "Mother's Day Crochet Rose",
-      price: 200,
+      price: 100,
       category: "Preserved Flowers",
       occasion: ["Mother's Day"],
       description:
@@ -121,7 +121,7 @@ export const products = [
       id: "fuzzy-rose-4",
       img: new URL("../assets/flower4.png", import.meta.url).href,
       title: "Birthday Crochet Rose",
-      price: 300,
+      price: 100,
       category: "Preserved Flowers",
       occasion: ["Birthday"],
       description:
@@ -141,7 +141,7 @@ export const products = [
       id: "fuzzy-rose-6",
       img: new URL("../assets/flower6.png", import.meta.url).href,
       title: "Graduation Crochet Rose",
-      price: 140,
+      price: 100,
       category: "Preserved Flowers",
       occasion: ["Graduation"],
       description:
@@ -151,7 +151,7 @@ export const products = [
       id: "fuzzy-rose-7",
       img: new URL("../assets/flower7.png", import.meta.url).href,
       title: "Christmas Crochet Rose",
-      price: 160,
+      price: 100,
       category: "Preserved Flowers",
       occasion: ["Christmas"],
       description:

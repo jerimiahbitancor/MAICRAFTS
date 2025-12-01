@@ -12,6 +12,8 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {
     sizeScale: "",
     additionalRequests: "",
     customerEmail: "",
+    shippingAddress: "",
+    paymentOption: "",
   });
 
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -69,6 +71,12 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {
     } else if (!/\S+@\S+\.\S+/.test(formData.customerEmail)) {
       newErrors.customerEmail = "Please enter a valid email.";
     }
+    if (!formData.shippingAddress.trim()) {
+      newErrors.shippingAddress = "Shipping address is required.";
+    }
+    if (!formData.paymentOption) {
+      newErrors.paymentOption = "Please select a payment option.";
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -80,6 +88,8 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {
       sizeScale: "",
       additionalRequests: "",
       customerEmail: "",
+      shippingAddress: "",
+      paymentOption: "",
     });
     setUploadedImage(null);
     setUploadedImageUrl(null);
@@ -114,6 +124,8 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {
       sizeScale: formData.sizeScale || "Not specified",
       additionalRequests: formData.additionalRequests || "None",
       customerEmail: formData.customerEmail,
+      shippingAddress: formData.shippingAddress,
+      paymentOption: formData.paymentOption,
       uploadedImage: uploadedImageUrl
         ? `<img src="${uploadedImageUrl}" alt="Reference" style="max-width: 100%; border-radius: 12px; margin: 10px 0;" />`
         : "No image uploaded",
@@ -267,10 +279,48 @@ const CustomizeFormModal = ({ isOpen, onClose }) => {
               />
             </div>
 
+            {/* Shipping Address */}
+            <div className="cfm-section">
+              <label className="cfm-sectionLabel">
+                <span className="cfm-number">6.</span> Shipping Address: <span style={{ color: "red" }}>*</span>
+              </label>
+              <textarea
+                name="shippingAddress"
+                value={formData.shippingAddress}
+                onChange={handleInputChange}
+                className="cfm-textarea"
+                rows={3}
+                placeholder="House/Unit No., Street, Barangay, City, Province, ZIP Code"
+              />
+              {errors.shippingAddress && <p className="cfm-error">{errors.shippingAddress}</p>}
+            </div>
+
+            {/* Payment Option */}
+            <div className="cfm-section">
+              <label className="cfm-sectionLabel">
+                <span className="cfm-number">7.</span> Payment Option: <span style={{ color: "red" }}>*</span>
+              </label>
+              <div className="cfm-checkboxGroup">
+                {["Cash on Delivery (COD)", "GCash"].map((payment) => (
+                  <label key={payment} className="cfm-checkboxLabel">
+                    <input
+                      type="radio"
+                      name="paymentOption"
+                      value={payment}
+                      checked={formData.paymentOption === payment}
+                      onChange={handleInputChange}
+                    />
+                    <span>{payment}</span>
+                  </label>
+                ))}
+              </div>
+              {errors.paymentOption && <p className="cfm-error">{errors.paymentOption}</p>}
+            </div>
+
             {/* Contact */}
             <div className="cfm-section">
               <label className="cfm-sectionLabel">
-                <span className="cfm-number">6.</span> Your Email: <span style={{ color: "red" }}>*</span>
+                <span className="cfm-number">8.</span> Your Email: <span style={{ color: "red" }}>*</span>
               </label>
               <input
                 type="email"

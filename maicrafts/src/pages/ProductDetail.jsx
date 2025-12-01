@@ -1,5 +1,5 @@
 // src/pages/ProductDetail.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ShoppingCart } from "lucide-react";
 import "../css/ProductDetail.css";
@@ -20,12 +20,48 @@ const ProductDetail = () => {
   // Thumbnails
   const thumbnails = product.images || [product.img];
 
-  // States
+  // States with default values
   const [selectedImage, setSelectedImage] = useState(thumbnails[0]);
   const [quantity, setQuantity] = useState(1);
-  const [flowerQty, setFlowerQty] = useState("");
-  const [size, setSize] = useState("");
+  const [flowerQty, setFlowerQty] = useState("5 Flowers");
+  const [size, setSize] = useState("Small");
   const [addOns, setAddOns] = useState("");
+  const [basePrice, setBasePrice] = useState(product.price); // Initialize with product price
+
+  // Multiplier for different flower quantities
+  // Assuming product.price is for 5 flowers
+  const flowerMultipliers = {
+    "5 Flowers": 1.0,    // Base price (100%)
+    "12 Flowers": 2.0,   // 2x for 12 flowers
+    "24 Flowers": 3.5,   // 3.5x for 24 flowers
+    "50 Flowers": 6.5    // 6.5x for 50 flowers
+  };
+
+  // Multiplier for different sizes
+  const sizeMultipliers = {
+    "Small": 1.0,
+    "Medium": 1.5,
+    "Large": 2.0
+  };
+
+  // Calculate base price based on size and flower quantity
+  useEffect(() => {
+    if (size && flowerQty) {
+      // Start with the product's base price (for 5 flowers, small size)
+      const basePriceFor5Flowers = product.price;
+      
+      // Apply flower quantity multiplier
+      const flowerMultiplier = flowerMultipliers[flowerQty] || 1;
+      let calculatedPrice = basePriceFor5Flowers * flowerMultiplier;
+      
+      // Apply size multiplier
+      const sizeMultiplier = sizeMultipliers[size] || 1;
+      calculatedPrice = calculatedPrice * sizeMultiplier;
+      
+      // Round to nearest whole number
+      setBasePrice(Math.round(calculatedPrice));
+    }
+  }, [size, flowerQty, product.price]);
 
   const getAddOnPrice = () => {
     if (addOns.includes("₱50")) return 50;
@@ -34,12 +70,14 @@ const ProductDetail = () => {
     return 0;
   };
 
-  const totalPrice = (product.price + getAddOnPrice()) * quantity;
+  // Calculate total price
+  const unitPrice = basePrice + getAddOnPrice();
+  const totalPrice = unitPrice * quantity;
 
   const addToCart = () => {
     let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const uniqueKey = `${product.id}-${size || "none"}-${flowerQty || "none"}-${addOns || "none"}`;
-    const finalPrice = product.price + getAddOnPrice();
+    const uniqueKey = `${product.id}-${size}-${flowerQty}-${addOns || "none"}`;
+    const finalPrice = basePrice + getAddOnPrice();
     const existingIndex = cart.findIndex((item) => item.key === uniqueKey);
 
     if (existingIndex !== -1) {
@@ -70,6 +108,26 @@ const ProductDetail = () => {
     .filter((p) => p.id !== product.id)
     .sort(() => Math.random() - 0.5)
     .slice(0, 3);
+
+  // Calculate price breakdown for display
+  const getBreakdownDetails = () => {
+    const baseFor5 = product.price;
+    const flowerMultiplier = flowerMultipliers[flowerQty] || 1;
+    const sizeMultiplier = sizeMultipliers[size] || 1;
+    
+    const flowerPrice = baseFor5 * flowerMultiplier;
+    const finalWithSize = flowerPrice * sizeMultiplier;
+    
+    return {
+      baseFor5,
+      flowerMultiplier,
+      sizeMultiplier,
+      flowerPrice,
+      finalWithSize: Math.round(finalWithSize)
+    };
+  };
+
+  const breakdown = getBreakdownDetails();
 
   return (
     <div className="product-detail-page">
@@ -102,23 +160,7 @@ const ProductDetail = () => {
           {/* Right: Info */}
           <div className="info-section">
             <h1 className="product-title">{product.title}</h1>
-            <h2 className="product-price">₱{totalPrice.toFixed(2)}</h2>
-
-            {/* Variations */}
-            <div className="variation-section">
-              <label className="label">Variations</label>
-              <div className="color-grid">
-                {["Pink Rose", "Red", "Yellow", "Brown", "Blue", "Green", "Violet", "Lover"].map(
-                  (color) => (
-                    <label key={color} className="color-option">
-                      <input type="radio" name="color" />
-                      <span className={`color-swatch ${color.toLowerCase().replace(" ", "-")}`} />
-                      <span className="color-name">{color}</span>
-                    </label>
-                  )
-                )}
-              </div>
-            </div>
+            <h2 className="product-price">Total: ₱{totalPrice.toFixed(2)}</h2>
 
             {/* Flower Qty + Size */}
             <div className="row">
@@ -129,21 +171,23 @@ const ProductDetail = () => {
                   onChange={(e) => setFlowerQty(e.target.value)}
                   className="select"
                 >
-                  <option value="">Choose...</option>
-                  <option>5 Flowers</option>
-                  <option>12 Flowers</option>
-                  <option>24 Flowers</option>
-                  <option>50 Flowers</option>
+                  <option value="5 Flowers">5 Flowers - ₱{Math.round(product.price).toFixed(2)}</option>
+                  <option value="12 Flowers">12 Flowers - ₱{Math.round(product.price * 2).toFixed(2)}</option>
+                  <option value="24 Flowers">24 Flowers - ₱{Math.round(product.price * 3.5).toFixed(2)}</option>
+                  <option value="50 Flowers">50 Flowers - ₱{Math.round(product.price * 6.5).toFixed(2)}</option>
                 </select>
               </div>
 
               <div className="half">
                 <label className="label">Size</label>
-                <select value={size} onChange={(e) => setSize(e.target.value)} className="select">
-                  <option value="">Choose...</option>
-                  <option>Small</option>
-                  <option>Medium</option>
-                  <option>Large</option>
+                <select 
+                  value={size} 
+                  onChange={(e) => setSize(e.target.value)} 
+                  className="select"
+                >
+                  <option value="Small">Small</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Large">Large</option>
                 </select>
               </div>
             </div>
@@ -186,13 +230,13 @@ const ProductDetail = () => {
                       {
                         id: product.id,
                         title: product.title,
-                        price: product.price + getAddOnPrice(),
+                        price: unitPrice,
                         img: selectedImage,
                         qty: quantity,
                         flowerQty,
                         size,
                         addOns,
-                        total: (product.price + getAddOnPrice()) * quantity,
+                        total: totalPrice,
                       },
                     ];
 
@@ -245,7 +289,7 @@ const ProductDetail = () => {
           isOpen={isCheckoutOpen}
           onClose={() => setIsCheckoutOpen(false)}
           cartItems={JSON.parse(localStorage.getItem("checkout_item") || "[]")}
-          totalPrice={(product.price + getAddOnPrice()) * quantity}
+          totalPrice={totalPrice}
         />
       </div>
     </div>

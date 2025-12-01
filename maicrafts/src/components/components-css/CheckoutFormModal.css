@@ -470,3 +470,49 @@
 .swal2-loader {
   border-color: #ffbd3a transparent #ffbd3a transparent !important;
 }
+
+.billing-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.billing-radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  position: relative;
+  font-size: 0.95rem;
+  color: #eee;
+
+}
+
+.billing-radio input {
+  display: none;
+}
+
+/* Custom Circle */
+.custom-radio {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ffbd3a;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.billing-radio input:checked + .custom-radio {
+  background-color: #ffbd3a;
+}
+
+.billing-radio input:checked + .custom-radio::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: #000;
+  border-radius: 50%;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}

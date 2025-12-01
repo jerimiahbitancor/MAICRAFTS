@@ -33,7 +33,6 @@ overflow-y: auto;
 color: var(--white);
 box-shadow: 0 25px 60px rgba(0,0,0,0.6);
 animation: modalSlideUp 0.5s cubic-bezier(0.16,1,0.3,1);
-border: 3px solid var(--gold-color);
 }
 
 /* Scrollbar */

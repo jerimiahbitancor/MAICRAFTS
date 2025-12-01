@@ -48,7 +48,7 @@ const CheckoutFormModal = ({ isOpen, onClose, onSubmit, cartItems, totalPrice })
       return;
     }
 
-    // Loading
+    // Loadinggerger
     Swal.fire({
       title: "Sending Order...",
       text: "Please wait",

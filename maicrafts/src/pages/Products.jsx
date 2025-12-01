@@ -256,41 +256,47 @@ const Products = () => {
               </div>
 
               {/* Products Grid */}
-              {filteredAndSortedProducts.length > 0 ? (
-                <div className="products-grid">
-                  {filteredAndSortedProducts.map((product) => (
-                    <Link
-                      key={product.id}
-                      to={`/product/${product.id}`}
-                      className="product-card"
-                    >
-                      <div className="product-image-container">
-                        <img 
-                          src={product.img} 
-                          alt={product.title} 
-                          className="product-image" 
-                          loading="lazy"
-                        />
-                        <div className="product-hover-overlay">
-                          <span className="quick-view-text">
-                            <i className="fas fa-eye me-2"></i>
-                            Quick View
-                          </span>
-                        </div>
-                      </div>
+                {filteredAndSortedProducts.length > 0 ? (
+                  <div className="products-grid">
+                    {filteredAndSortedProducts.map((product) => {
+                      // Determine the correct route based on category
+                      const isCrochet = product.category.toLowerCase().includes("crochet");
+                      const productRoute = isCrochet ? `/crochet/${product.id}` : `/product/${product.id}`;
                       
-                      <div className="product-info">
-                        <h3 className="product-name">
-                          {product.id.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
-                        </h3>
-                        <div className="product-price-container">
-                          <span className="product-price">₱{product.price.toFixed(2)}</span>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              ) : (
+                      return (
+                        <Link
+                          key={product.id}
+                          to={productRoute}
+                          className="product-card"
+                        >
+                          <div className="product-image-container">
+                            <img 
+                              src={product.img} 
+                              alt={product.title} 
+                              className="product-image" 
+                              loading="lazy"
+                            />
+                            <div className="product-hover-overlay">
+                              <span className="quick-view-text">
+                                <i className="fas fa-eye me-2"></i>
+                                Quick View
+                              </span>
+                            </div>
+                          </div>
+                          
+                          <div className="product-info">
+                            <h3 className="product-name">
+                              {product.title} {/* Using title instead of ID */}
+                            </h3>
+                            <div className="product-price-container">
+                              <span className="product-price">₱{product.price.toFixed(2)}</span>
+                            </div>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                ) : (
                 <div className="empty-state">
                   <div className="empty-state-icon">
                     <i className="fas fa-search"></i>
